@@ -1,0 +1,44 @@
+{% extends 'base/main.html' %}
+
+{% block main %}
+    <div class="userforms">
+        <div class="inputform">
+            <h2 class="input-text">Регистрация</h2>
+            <label class="lnewdata">
+                <p class="newdata">Логин</p>
+                <input style="" class="inputvs" placeholder="Введите данные" type="text">
+            </label>
+            <label class="lnewdata">
+                <p class="newdata">Email</p>
+                <input style="" class="inputvs" placeholder="Введите данные" type="text">
+            </label>
+            <label class="lnewdata">
+                <p class="newdata">Пароль</p>
+                <input style="" class="inputvs" placeholder="Введите данные" type="text">
+            </label>
+            <label class="lnewdata">
+                <p class="newdata">Подтверждение пароля</p>
+                <input style="" class="inputvs" placeholder="Введите данные" type="text">
+            </label>
+            <div class='formsubmit'>
+                <a class="authandreg" href="{% url 'user_url' %}">Вход</a>
+                <button class="goformsubmit">Регистрация</button>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
+
+{% block script %}
+    <script>
+        V('header, section').event({
+            events: ['mousewheel'],
+            funcs: [
+                function(e) {
+                    console.log(e);
+                    if(e.ctrlKey)
+                        e.preventDefault();
+                }
+            ]
+        });
+    </script>
+{% endblock script %}

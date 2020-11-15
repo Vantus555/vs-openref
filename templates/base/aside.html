@@ -1,0 +1,43 @@
+
+        <aside class="aside-theme">
+            <nav>
+                {% url 'main_url' as currenturl%}
+                <a href="{{ currenturl }}" class="nav-items">
+                    <div class="nav-item-active {% if currenturl == path %}nav-item-active-theme{% endif %}"></div>
+                    <div class="nav-items-item">
+                        <div class="nav-item nav-item-main nav-item-theme {% if path == '/' %} nav-item-active-theme{% endif %}">
+                            
+                        </div>
+                    </div>
+                </a>
+                {% url 'blog_url' as currenturl%}
+                <a href="{{ currenturl }}" class="nav-items">
+                    <div class="nav-item-active {% if currenturl in path %}nav-item-active-theme{% endif %}"></div>
+                    <div class="nav-items-item">
+                        <div class="nav-item nav-item-post nav-item-theme {% if 'blog' in path %}nav-item-active-theme{% endif %}">
+                            <div class="posts">
+
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </nav>
+            <footer>
+                <div class="nav-items">
+                    <div class="nav-item-active"></div>
+                    <div class="nav-items-item">
+                        <div class="nav-item nav-item-settings nav-item-theme">
+                            
+                        </div>
+                    </div>
+                </div>
+                {% url 'user_url' as currenturl%}
+                <a href="{{ currenturl }}" class="nav-items">
+                    <div class="nav-item-active {% if currenturl in path %}nav-item-active-theme{% endif %}"></div>
+                    <div class="nav-items-item">
+                        <div class="nav-item-user nav-item nav-item-theme {% if currenturl in path %}nav-item-active-theme{% endif %}">
+                        </div>
+                    </div>
+                </a>
+            </footer>
+        </aside>

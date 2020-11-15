@@ -1,0 +1,345 @@
+{% extends 'base/main.html' %}
+
+{% block article %}
+    {% load static %}
+    <article>
+        <div class="article-info">
+            <div class="article-title">
+                <div class="article-title-text">
+                    посты
+                </div>
+                <div class="article-title-settings">
+                    <div class="article-title-settings-add">
+
+                    </div>
+                </div>
+            </div>
+            <div class="article-search">
+                <input style="height: 100%;" class="inputvs" placeholder="Поиск по статьям" type="text">
+            </div>
+        </div>
+
+        <div class="article-content">
+            <div tabindex="1" class="article-content-category">
+                <div class="toggle-category toggle-category-open">
+                    >
+                </div>
+                <div class="name-category">
+                    Все
+                </div>
+                <div class="count-in-category">
+                    <div class="count">
+                        10
+                    </div>
+                </div>
+            </div>
+            <div class="article-content-category-list">
+                <div data-art='post-1' class="post post-theme">
+                    <div class="post-img">
+                        <div style="
+                            background-image: url({% static 'image/1.jpg' %});
+                            background-size: cover;" class="post-source-img">
+                        </div>
+                    </div>
+                    <div class="post-about">
+                        <div class="post-title">
+                            <div class="post-title-text-data">
+                                <div class="post-title-text">
+                                    Live Server
+                                </div>
+                                <div class="post-data">
+                                    11.11.2020
+                                </div>
+                            </div>
+                            <div class="post-statistic">
+                                <div class="post-view">
+                                    3.6M
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-intro">
+                            Launch a development zsdsdasedsaefdsdefswefse 
+                        </div>
+                        <div class="post-users">
+                            Ritwick Dey
+                        </div>
+                    </div>
+                </div>
+                <div data-art='post-2' class="post post-theme">
+                    <div class="post-img">
+                        <div style="
+                            background-image: url({% static 'image/1.jpg' %});
+                            background-size: cover;" class="post-source-img">
+                        </div>
+                    </div>
+                    <div class="post-about">
+                        <div class="post-title">
+                            <div class="post-title-text-data">
+                                <div class="post-title-text">
+                                    Live Server
+                                </div>
+                                <div class="post-data">
+                                    11.11.2020
+                                </div>
+                            </div>
+                            <div class="post-statistic">
+                                <div class="post-view">
+                                    3.6M
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-intro">
+                            Launch a development zsdsdasedsaefdsdefswefse 
+                        </div>
+                        <div class="post-users">
+                            Ritwick Dey
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div tabindex="1" class="article-content-category">
+                <div class="toggle-category">
+                    >
+                </div>
+                <div class="name-category">
+                    Ваши
+                </div>
+                <div class="count-in-category">
+                    <div class="count">
+                        1
+                    </div>
+                </div>
+            </div>
+            <div style="display: none;" class="article-content-category-list">
+                
+            </div>
+        </div>
+    </article>
+{% endblock article %}
+
+{% block main %}
+    <div class="blog-post">
+        <div class="main-active-tabs"></div>
+        <div class="main-active-path"></div>
+    </div>
+{% endblock main %}
+
+{% block bodydown %}
+    <div class="flow-window">
+        <div class="flow-window-close"></div>
+        <label class="lnewdata">
+            <p class="newdata">Введите название статьи</p>
+            <input style="font-size: 22px;" class="inputvs" placeholder="Название" type="text">
+        </label>
+        <label class="lnewdata">
+            <p class="newdata">Введите описание статьи</p>
+            <input style="font-size: 22px;" class="inputvs" placeholder="Название" type="text">
+        </label>
+    </div>
+{% endblock bodydown %}
+
+{% block script %}
+    <script>
+        V('header, section, .flow-window').event({
+            events: ['mousewheel'],
+            funcs: [
+                function(e) {
+                    console.log(e);
+                    if(e.ctrlKey)
+                        e.preventDefault();
+                }
+            ]
+        });
+        V('.article-content-category').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    let elem = V(this);
+                    elem.children('.toggle-category').toggleClass('toggle-category-open');
+                    let next = elem.nextElement();
+                    next.toggleShow({
+                        speed: 250
+                    });
+                }
+            ]
+        });
+        V('.nav-items').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    let elem = V(this).children('.nav-item-active');
+                    let el2 = V(this).children('.nav-item');
+                    if(el2.hasClass('nav-item-active-theme')){
+                        e.preventDefault();
+                        V('article').toggleShow({
+                            display: 'flex',
+                            direction: 'w',
+                            speed: 100
+                        });
+                        elem.toggleClass('nav-item-active-theme');
+                    }
+                }
+            ]
+        });
+
+        let main_tab = new VElement(
+            `<div data-post-art-tab="{post}" class="main-active-tab main-active-tab-theme">
+                <div class="main-active-tab-icon"></div>
+                <div class="main-active-tab-name">Live Server</div>
+                <div class="main-active-tab-close-wrap"><div class="main-active-tab-close"></div></div>
+            </div>`
+        );
+        let main_tab_content = new VElement(
+            `<div data-post-art-tab-content="{post}" class="main-post">
+                <div class="main-post-info">
+                    <div class="main-post-about">
+                        <div style="
+                        background-image: url('1.jpg');
+                        background-size: cover;" class="main-post-about-img">
+                        </div>
+                        <div class="main-post-description">
+                            <div class="main-post-title">
+                                <div class="main-post-title-text">
+                                    {name}
+                                </div>
+                            </div>
+                            <div class="main-post-statistic">
+                                <div class="main-post-statistic-container">
+                                    Vantus
+                                </div>
+                                <div class="main-post-statistic-div"></div>
+                                <div class="main-post-statistic-container">
+                                    3 601 928
+                                </div>
+                            </div>
+                            <div class="main-post-intro">
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque inventore voluptatibus quibusdam optio error consequatur minus, incidunt nulla officiis, quos labore doloremque doloribus quidem iure, libero aspernatur maxime quam earum!
+                            </div>
+                            <div class="main-post-like">
+                                Лайки и репосты
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-post-source">
+                        <div class="main-post-source-tabs">
+                            <div class="main-post-tab main-post-tab-active">
+                                Содержание
+                            </div>
+                            <div class="main-post-tab">
+                                Шпаргалка
+                            </div>
+                            <div class="main-post-tab">
+                                Журнал изменений
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-post-content">
+                    <div class="post-tab-content-1 post-tab-content post-tab-content-actve">
+
+                    </div>
+                    <div class="post-tab-content-2 post-tab-content">
+
+                    </div>
+                    <div class="post-tab-content-3 post-tab-content">
+                        
+                    </div>
+                </div>
+            </div>`
+        );
+
+        V('.post').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    let postt = V(this).attr('data-art');
+                    let main_actve = V(`div[data-post-art-tab="${postt}"]`);
+                    if(main_actve.count == 0){
+                        main_tab.render(V('.main-active-tabs'), 'prepend',{
+                            post: postt
+                        });
+                        main_tab_content.render(V('.blog-post'), 'append',{
+                            post: postt,
+                            name: postt
+                        });
+                    }
+                        
+                }
+            ]
+        });
+
+        V('.main-active-tabs').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    let el = V(this).parent().attr('data-post-art-tab');
+                    V('.main-active-tab-theme-active').removeClass('main-active-tab-theme-active');
+                    V(this).parent().addClass('main-active-tab-theme-active');
+                    V('.main-post-active').removeClass('main-post-active');
+                    V(`div[data-post-art-tab-content = "${el}"]`).addClass('main-post-active');
+                }
+            ],
+            elements: ['.main-active-tab-icon', '.main-active-tab-name']
+        });
+
+        V('body').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    console.log(0);
+                    let postTab = 0;
+                    let Tabs = V(this).parent().children('.main-post-tab');
+                    let TabsContent = V(this).parent('.main-post').children('.post-tab-content');
+                    V(this).parent().children('.main-post-tab-active').removeClass('main-post-tab-active');
+
+                    Tabs.for((index, element, mass) => {
+                        if(mass[index] != e.target){
+                            postTab+=1
+                            return true;
+                        }
+                        else {
+                            element.addClass('main-post-tab-active');
+                            return false;
+                        }
+                    });
+
+                    V(this).parent('.main-post').children('.post-tab-content-actve').removeClass('post-tab-content-actve');
+                    TabsContent.get(postTab).toggleClass('post-tab-content-actve');
+                }
+            ],
+            elements: ['.main-post-tab']
+        });
+
+        V('body').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    let id = V(this).parent('.main-active-tab').attr('data-post-art-tab');
+                    V(this).parent('.main-active-tab').remove();
+                    V(`div[data-post-art-tab-content="${id}"]`).remove();
+                }
+            ],
+            elements: ['.main-active-tab-close']
+        });
+
+        V('.article-title-settings-add').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    V('.flow-window').show();
+                }
+            ]
+        });
+
+        V('.flow-window-close').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    V('.flow-window').hide({
+                        speed: 250
+                    });
+                }
+            ]
+        });
+    </script>
+{% endblock script %}
