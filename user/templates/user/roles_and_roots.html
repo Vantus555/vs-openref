@@ -1,0 +1,34 @@
+{% extends 'base/main.html' %}
+
+{% block main %}
+    <div class="roles_and_roots">
+        <div class="roles">
+            <div class="role_add">
+                <span>Роли</span>
+                <div class="role_btn_add"></div>
+            </div>
+            <div class="user-hr"></div>
+            <div class="role_list">
+                <div class="role">
+                    <div class="role-name">
+                        supruser
+                    </div>
+                    <div class="role-settings">
+                        <div class="role-settings-points"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="roots">
+            <div>Настройка прав пользователей сайта</div>
+            <div class="user-hr"></div>
+            <div class="category-root">Название роли</div>
+            <input class="input-big inputvs" placeholder="Название" type="text">
+            <div class="category-root">Цвет роли</div>
+            {% comment %}  {% endcomment %}
+            <div class="category-root">Просмотр сайта от лица роли</div>
+            <div class="category-root">Настройки роли</div>
+            <div class="category-root">Основные роли</div>
+        </div>
+    </div>
+{% endblock main %}

@@ -72,14 +72,15 @@ header {
     outline: none;
     border: none;
 }
-
+/* 
 .header-items-text-theme:focus + .header-items-menu{
     display: block;
-}
+} */
 
 .header-items-menu{
     display: none;
     position: absolute;
+    z-index: 2;
     top: 100%;
     left: 0;
     padding: 5px 0;
@@ -91,6 +92,7 @@ header {
 }
 
 .header-items-menu-items{
+    text-decoration: none;
     display: flex;
     justify-content: space-between;
     cursor: pointer;
@@ -297,9 +299,9 @@ aside{
 
 article{
     flex: 1 1 500px;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
     background-color: #252526;
-    display: flex;
-    flex-direction: column;
 }
 
 .article-info{
@@ -373,10 +375,13 @@ article{
     color: #fff;
     padding: 2px 5px;
     box-sizing: border-box;
+    transition: box-shadow 0.25s ease-in-out;
 }
 
 .inputvs:focus{
-    outline: 1px solid #0574be;
+    box-shadow: 0 0 0 0.5px #0574be;
+    outline: none;
+    /* outline: 1px solid #0574be; */
 }
 
 .article-content{
@@ -438,6 +443,10 @@ article{
 .article-content-category-list{
     width: 100%;
     height: 100%;
+    position: relative;
+    padding-right: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .post{
@@ -876,4 +885,316 @@ main > h1{
 
 .goformsubmit:focus{
     box-shadow: 0px 0px 20px 4px inset black;
+}
+
+.newpost{
+    display: grid;
+    --image-size: 300px;
+    grid-template-columns: var(--image-size) 1fr;
+    grid-column-gap: 20px;
+}
+
+.loadimg{
+    width: var(--image-size);
+    height: var(--image-size);
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    margin: 0;
+}
+
+.inputloadimg{
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.viewloadimg{
+    height: 100%;
+    width: 100%;
+}
+
+.user-info{
+    /* height: 500px; */
+    width: 100%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+}
+
+.user-image{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.user-image > img{
+    width: 100%;
+}
+
+.user-data{
+    color: #fff;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.user-who{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2px;
+}
+
+.user-name{
+    font-size: 19px;
+}
+
+.user-online{
+    font-size: 13px;
+}
+
+.user-status{
+    width: 100%;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.user-status-theme:hover{
+    background-color: #3C3C3C;
+}
+
+.user-status-text{
+    display: block;
+    width: 100%;
+}
+
+.user-dict{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-column-gap: 50px;
+    grid-row-gap: 3px;
+}
+
+.user-dict-key{
+    opacity: 0.5;
+}
+
+.user-hr{
+    width: 100%;
+    height: 25px;
+    display: flex;
+    align-items: center;
+}
+
+.user-hr:after{
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: rgb(100, 100, 100);
+}
+
+.user-roles{
+    display: none;
+}
+
+.user-role{
+    padding-left: 30px;
+}
+
+.more-roles{
+    cursor: pointer;
+}
+
+.user-change-pass{
+    color: #fff;
+    opacity: 0.8;
+}
+
+.user-change-pass:hover{
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.user-own{
+    width: 100%;
+    height: 50px;
+    display: flex;
+}
+
+.user-own-block{
+    width: 100px;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    cursor: pointer;
+}
+
+.user-own-block-count{
+    color: rgb(75, 75, 255);
+    text-shadow: 3px -2px 3px black;
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    transition: text-shadow 0.2s ease-in;
+}
+
+.user-own-block:hover .user-own-block-count{
+    text-shadow: 4px -4px 3px black;
+}
+
+.user-own-block-name{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-settings{
+    width: 100%;
+    height: 500px;
+    background-color: rgb(158, 0, 0);
+    box-sizing: border-box;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.scroll{
+    width: 20px;
+    height: 100%;
+    background-color: #555;
+    right: 0;
+    position: absolute;
+    transition: opacity 0.5s;
+    opacity: 0;
+}
+
+.scroll:hover{
+    opacity: 1;
+}
+
+.roles_and_roots{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+}
+
+.roles{
+    display: grid;
+    --roles-add-height: 30px;
+    grid-template-rows: var(--roles-add-height) auto 1fr;
+    box-sizing: border-box;
+    padding: 25px;
+    color: #fff;
+}
+
+.role_add{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.role_btn_add{
+    width: calc(var(--roles-add-height) / 2);
+    height: 50%;
+    border: 1px solid rgb(85, 74, 74);
+    border-radius: 50%;
+    position: relative;
+}
+
+.role_add:hover .role_btn_add{
+    background-color: #505050;
+}
+
+.role_btn_add:after,
+.role_btn_add:before{
+    position: absolute;
+    content: '';
+    display: block;
+    height: 5%;
+    width: 60%;
+    background-color: rgb(150, 150, 150);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+}
+
+.role_btn_add:after{
+    transform: rotateZ(90deg);
+}
+
+.role_list{
+    display: grid;
+    grid-auto-rows: 30px;
+    grid-row-gap: 10px;
+}
+
+.role{
+    background-color: #3c3c3c;
+    padding: 2px 7px;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 1fr 30px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.role:hover{
+    opacity: 1;
+}
+
+.role-name{
+    display: flex;
+    align-items: center;
+    mix-blend-mode: difference;
+}
+
+.role-settings{
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+.role-settings-points,
+.role-settings:after,
+.role-settings:before{
+    mix-blend-mode: difference;
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #b9bbbe;
+}
+
+.roots{
+    padding: 25px;
+    box-sizing: border-box;
+    color: #fff;
+}
+
+.category-root{
+    margin-top: 5px;
+    font-size: 9px;
+    opacity: 0.5;
+    text-transform: uppercase;
+}
+
+.input-big{
+    padding: 5px;
+    border-radius: 3px;
+    margin: 5px 0;
 }

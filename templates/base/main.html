@@ -31,4 +31,43 @@
 {% block script %}
 {% endblock script %}
 
+<script>
+    V('header, section, .flow-window').event({
+        events: ['mousewheel'],
+        funcs: [
+            function(e) {
+                if(e.ctrlKey)
+                    e.preventDefault();
+            }
+        ]
+    });
+
+    V('.header-items-text').event({
+        events: ['focus', 'blur'],
+        funcs: [
+            function(){
+                V(this).parent().children('.header-items-menu').show({
+                    speed: 150
+                });
+            },
+            function(){
+                V(this).parent().children('.header-items-menu').hide({
+                    speed: 150
+                });
+            },
+        ]
+    });
+
+    V('.header-items-menu').event({
+        events: ['mousedown'],
+        funcs: [
+            function(e){
+                e.preventDefault();
+            },
+        ]
+    });
+
+
+</script>
+
 </html>

@@ -1,0 +1,177 @@
+{% extends 'base/main.html' %}
+
+{% block main %}
+    {% load static %}
+    <div class="user-info">
+        <div class="user-image">
+            <label class="loadimg lnewdata">
+                <img id="newimagepost" src="{% static 'image/1.jpg' %}" class="viewloadimg"></img>
+                <input class="inputloadimg" accept="image/*" type="file">
+            </label>
+        </div>
+        <div class="user-data">
+            <div class="user-who">
+                <div class="user-name">
+                    Иван Костников
+                </div>
+                <div class="user-online">
+                    online
+                </div>
+            </div>
+            <div class="user-status user-status-theme">
+                <span class="user-status-text">Vantus</span>
+                <div style="display: none;" class='user-change-status'>
+                    <input style="margin-bottom: 5px;" placeholder="Статус" class="inputvs" type='text'>
+                    <button class="goformsubmit user-change-status-btn">Изменить</button>
+                </div>
+            </div>
+            <div class="user-hr"></div>
+            <div class="user-dict">
+                <div class="user-dict-key">Email:</div>
+                <div class="user-dict-value">nindzay1998@gmail.com</div>
+                <div class="user-dict-key">Дата создания:</div>
+                <div class="user-dict-value">16.11.2020</div>
+                <div class="user-dict-key">Доступные роли =></div>
+                <div class="user-dict-value">
+                    <div>{ 
+                        <span class="more-roles">...</span>
+                        <div class="user-roles">
+                            <div class="user-role">supersur</div>
+                            <div class="user-role">supersur</div>
+                            <div class="user-role">supersur</div>
+                        </div>   
+                    }</div>
+                </div>
+                <div class="user-dict-key">Пароль:</div>
+                <div class="user-dict-value"><div class="user-change-pass" href="">Изменить</div></div>
+            </div>
+            <div class="user-hr"></div>
+            <div class="user-own">
+                <div class="user-own-block">
+                    <div class="user-own-block-count">
+                        10
+                    </div>
+                    <div class="user-own-block-name">
+                        друзей
+                    </div>
+                </div>
+                <div class="user-own-block">
+                    <div class="user-own-block-count">
+                        30
+                    </div>
+                    <div class="user-own-block-name">
+                        постов
+                    </div>
+                </div>
+                <div class="user-own-block">
+                    <div class="user-own-block-count">
+                        100
+                    </div>
+                    <div class="user-own-block-name">
+                        проектов
+                    </div>
+                </div>
+                <div class="user-own-block">
+                    <div class="user-own-block-count">
+                        25
+                    </div>
+                    <div class="user-own-block-name">
+                        сборок
+                    </div>
+                </div>
+                <div class="user-own-block">
+                    <div class="user-own-block-count">
+                        42
+                    </div>
+                    <div class="user-own-block-name">
+                        файлы
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %} <div class="user-settings">
+    
+    </div> {% endcomment %}
+{% endblock main %}
+
+{% block script %}
+    <script>
+        V('.user-status-text').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    let elem = V(this).parent('.user-status')
+                    if(elem.hasClass('user-status-theme')){
+
+                        elem.toggleClass('user-status-theme');
+                        let statustext = elem.children('.user-status-text');
+                        let statusinput = elem.children('.user-change-status');
+                        statustext.hide();
+                        statusinput.children('input').val(statustext.text());
+                        statusinput.show();
+                    }
+                }
+            ]
+        });
+
+        V('.user-change-status-btn').event({
+            events: ['click'],
+            funcs: [
+                function(e){
+                    e.preventDefault();
+                    let elem = V(this).parent('.user-status')
+                    elem.toggleClass('user-status-theme');
+                    let statustext = elem.children('.user-status-text');
+                    let statusinput = elem.children('.user-change-status');
+                    statustext.show();  
+                    statustext.text(statusinput.children('input').val());
+                    statusinput.hide();
+                }
+            ]
+        });
+
+        V('.user-own-block-count').forEach(element => {
+            let count = element.text();
+            let second = 2000 / count;
+            for(let i = 0; i < count; i++){
+                setTimeout(() => {
+                    element.text(i);
+                }, i * second);
+            }
+        });
+
+        V('.more-roles').event({
+            events: ['click'],
+            funcs: [
+                function(){ 
+                    V('.user-roles').toggleShow({
+                        speed: 250
+                    });
+                },
+            ]
+        });
+
+        V(".inputloadimg").event({
+            events: ['change'],
+            funcs: [
+                function(){
+                    var input = this;
+                    if (input.files && input.files[0]) {
+                        if (input.files[0].type.match('image.*')) {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                V('#newimagepost').attr('src', e.target.result);
+                            }
+                            reader.readAsDataURL(input.files[0]);
+                        } else {
+                            console.error('Ошибка, файл не является изображение!');
+                        }
+                    } else {
+                        console.error('Файл не выбран');
+                    }
+                },
+            ]
+        });
+    </script>
+{% endblock script %}

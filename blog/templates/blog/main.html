@@ -18,7 +18,6 @@
                 <input style="height: 100%;" class="inputvs" placeholder="Поиск по статьям" type="text">
             </div>
         </div>
-
         <div class="article-content">
             <div tabindex="1" class="article-content-category">
                 <div class="toggle-category toggle-category-open">
@@ -34,6 +33,100 @@
                 </div>
             </div>
             <div class="article-content-category-list">
+                <div class="scroll"></div>
+                <div data-art='post-1' class="post post-theme">
+                    <div class="post-img">
+                        <div style="
+                            background-image: url({% static 'image/1.jpg' %});
+                            background-size: cover;" class="post-source-img">
+                        </div>
+                    </div>
+                    <div class="post-about">
+                        <div class="post-title">
+                            <div class="post-title-text-data">
+                                <div class="post-title-text">
+                                    Live Server
+                                </div>
+                                <div class="post-data">
+                                    11.11.2020
+                                </div>
+                            </div>
+                            <div class="post-statistic">
+                                <div class="post-view">
+                                    3.6M
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-intro">
+                            Launch a development zsdsdasedsaefdsdefswefse 
+                        </div>
+                        <div class="post-users">
+                            Ritwick Dey
+                        </div>
+                    </div>
+                </div>
+                <div data-art='post-1' class="post post-theme">
+                    <div class="post-img">
+                        <div style="
+                            background-image: url({% static 'image/1.jpg' %});
+                            background-size: cover;" class="post-source-img">
+                        </div>
+                    </div>
+                    <div class="post-about">
+                        <div class="post-title">
+                            <div class="post-title-text-data">
+                                <div class="post-title-text">
+                                    Live Server
+                                </div>
+                                <div class="post-data">
+                                    11.11.2020
+                                </div>
+                            </div>
+                            <div class="post-statistic">
+                                <div class="post-view">
+                                    3.6M
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-intro">
+                            Launch a development zsdsdasedsaefdsdefswefse 
+                        </div>
+                        <div class="post-users">
+                            Ritwick Dey
+                        </div>
+                    </div>
+                </div>
+                <div data-art='post-1' class="post post-theme">
+                    <div class="post-img">
+                        <div style="
+                            background-image: url({% static 'image/1.jpg' %});
+                            background-size: cover;" class="post-source-img">
+                        </div>
+                    </div>
+                    <div class="post-about">
+                        <div class="post-title">
+                            <div class="post-title-text-data">
+                                <div class="post-title-text">
+                                    Live Server
+                                </div>
+                                <div class="post-data">
+                                    11.11.2020
+                                </div>
+                            </div>
+                            <div class="post-statistic">
+                                <div class="post-view">
+                                    3.6M
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-intro">
+                            Launch a development zsdsdasedsaefdsdefswefse 
+                        </div>
+                        <div class="post-users">
+                            Ritwick Dey
+                        </div>
+                    </div>
+                </div>
                 <div data-art='post-1' class="post post-theme">
                     <div class="post-img">
                         <div style="
@@ -111,7 +204,6 @@
                 </div>
             </div>
             <div style="display: none;" class="article-content-category-list">
-                
             </div>
         </div>
     </article>
@@ -127,29 +219,28 @@
 {% block bodydown %}
     <div class="flow-window">
         <div class="flow-window-close"></div>
-        <label class="lnewdata">
-            <p class="newdata">Введите название статьи</p>
-            <input style="font-size: 22px;" class="inputvs" placeholder="Название" type="text">
-        </label>
-        <label class="lnewdata">
-            <p class="newdata">Введите описание статьи</p>
-            <input style="font-size: 22px;" class="inputvs" placeholder="Название" type="text">
-        </label>
+        <div class="newpost">
+            <label class="loadimg lnewdata">
+                <img id="newimagepost" src="{% static 'image/1.jpg' %}" class="viewloadimg"></img>
+                <input class="inputloadimg" accept="image/*" type="file">
+            </label>
+            <div class="newpostabout">
+                <label class="lnewdata">
+                    <p class="newdata">Введите название статьи</p>
+                    <input style="font-size: 22px;" class="inputvs" placeholder="Название" type="text">
+                </label>
+                <label class="lnewdata">
+                    <p class="newdata">Введите описание статьи</p>
+                    <input style="font-size: 22px;" class="inputvs" placeholder="Название" type="text">
+                </label>
+                <button class="goformsubmit">Создать</button>
+            </div>
+        </div>
     </div>
 {% endblock bodydown %}
 
 {% block script %}
     <script>
-        V('header, section, .flow-window').event({
-            events: ['mousewheel'],
-            funcs: [
-                function(e) {
-                    console.log(e);
-                    if(e.ctrlKey)
-                        e.preventDefault();
-                }
-            ]
-        });
         V('.article-content-category').event({
             events: ['click'],
             funcs: [
@@ -172,7 +263,7 @@
                     if(el2.hasClass('nav-item-active-theme')){
                         e.preventDefault();
                         V('article').toggleShow({
-                            display: 'flex',
+                            display: 'grid',
                             direction: 'w',
                             speed: 100
                         });
@@ -339,6 +430,28 @@
                         speed: 250
                     });
                 }
+            ]
+        });
+
+        V(".inputloadimg").event({
+            events: ['change'],
+            funcs: [
+                function(){
+                    var input = this;
+                    if (input.files && input.files[0]) {
+                        if (input.files[0].type.match('image.*')) {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                V('#newimagepost').attr('src', e.target.result);
+                            }
+                            reader.readAsDataURL(input.files[0]);
+                        } else {
+                            console.error('Ошибка, файл не является изображение!');
+                        }
+                    } else {
+                        console.error('Файл не выбран');
+                    }
+                },
             ]
         });
     </script>
