@@ -1,0 +1,12 @@
+{% extends 'base/main.html' %}
+
+{% block main %}
+    {% load images %}
+    <div class="images">
+        <div class="gallery">
+            {% for img in user|images %}
+                <div style="background-image: url(/media/images/{{user.nickname}}/{{ img }});" class="gallery-image"></div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock main %}

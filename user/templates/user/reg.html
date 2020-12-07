@@ -6,19 +6,19 @@
             <h2 class="input-text">Регистрация</h2>
             <label class="lnewdata">
                 <p class="newdata">Логин</p>
-                <input style="" class="inputvs" placeholder="Введите данные" type="text">
+                <input id="nickname" class="inputvs" placeholder="Введите данные" type="text">
             </label>
             <label class="lnewdata">
                 <p class="newdata">Email</p>
-                <input style="" class="inputvs" placeholder="Введите данные" type="text">
+                <input id="email" class="inputvs" placeholder="Введите данные" type="text">
             </label>
             <label class="lnewdata">
                 <p class="newdata">Пароль</p>
-                <input style="" class="inputvs" placeholder="Введите данные" type="text">
+                <input id="pass" class="inputvs" placeholder="Введите данные" type="text">
             </label>
             <label class="lnewdata">
                 <p class="newdata">Подтверждение пароля</p>
-                <input style="" class="inputvs" placeholder="Введите данные" type="text">
+                <input id="confirmpass" class="inputvs" placeholder="Введите данные" type="text">
             </label>
             <div class='formsubmit'>
                 <a class="authandreg" href="{% url 'user_url' %}">Вход</a>
@@ -37,6 +37,32 @@
                     console.log(e);
                     if(e.ctrlKey)
                         e.preventDefault();
+                }
+            ]
+        });
+
+        V('.goformsubmit').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+                    
+                    data.append('nickname', V('#nickname').val());
+                    data.append('email', V('#email').val());
+                    data.append('password', V('#pass').val());
+                    data.append('confirmpass', V('#confirmpass').val());
+                    
+                    let response = fetch('{% url 'ajaxRegistration_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.text();
+                    }).then(data => {
+                            alert(data);
+                            //document.location.reload(true);
+                    });/**/
                 }
             ]
         });

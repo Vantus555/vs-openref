@@ -6,11 +6,11 @@
             <h2 class="input-text">Войти</h2>
             <label class="lnewdata">
                 <p class="newdata">Логин</p>
-                <input style="" class="inputvs" placeholder="Введите данные" type="text">
+                <input id="nickname" class="inputvs" placeholder="Введите данные" type="text">
             </label>
             <label class="lnewdata">
                 <p class="newdata">Пароль</p>
-                <input style="" class="inputvs" placeholder="Введите данные" type="text">
+                <input id="pass" class="inputvs" placeholder="Введите данные" type="password">
             </label>
             <div class='formsubmit'>
                 <a class="authandreg" href="{% url 'user_url' %}?reg=True">Регистрация</a>
@@ -29,6 +29,30 @@
                     console.log(e);
                     if(e.ctrlKey)
                         e.preventDefault();
+                }
+            ]
+        });
+        V('.goformsubmit').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+                    
+                    data.append('nickname', V('#nickname').val());
+                    data.append('password', V('#pass').val());
+                    
+                    let response = fetch('{% url 'ajaxInput_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.text();
+                    }).then(data => {
+                            if(data == 'Вход!')
+                                document.location.reload(true);
+                            else alert(data)
+                    });/**/
                 }
             ]
         });

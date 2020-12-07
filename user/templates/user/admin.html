@@ -5,21 +5,21 @@
     <div class="user-info">
         <div class="user-image">
             <label class="loadimg lnewdata">
-                <img id="newimagepost" src="{% static 'image/1.jpg' %}" class="viewloadimg"></img>
+                <img id="newimagepost" src="{{ user.img.url }}" class="viewloadimg"></img>
                 <input class="inputloadimg" accept="image/*" type="file">
             </label>
         </div>
         <div class="user-data">
             <div class="user-who">
                 <div class="user-name">
-                    Иван Костников
+                    {{ user.nickname }}
                 </div>
                 <div class="user-online">
                     online
                 </div>
             </div>
             <div class="user-status user-status-theme">
-                <span class="user-status-text">Vantus</span>
+                <span class="user-status-text">{{ user.minitag }}</span>
                 <div style="display: none;" class='user-change-status'>
                     <input style="margin-bottom: 5px;" placeholder="Статус" class="inputvs" type='text'>
                     <button class="goformsubmit user-change-status-btn">Изменить</button>
@@ -28,22 +28,32 @@
             <div class="user-hr"></div>
             <div class="user-dict">
                 <div class="user-dict-key">Email:</div>
-                <div class="user-dict-value">nindzay1998@gmail.com</div>
+                <div class="user-dict-value">{{ user.email }}</div>
                 <div class="user-dict-key">Дата создания:</div>
-                <div class="user-dict-value">16.11.2020</div>
+                <div class="user-dict-value">{{ user.time }}</div>
                 <div class="user-dict-key">Доступные роли =></div>
                 <div class="user-dict-value">
                     <div>{ 
                         <span class="more-roles">...</span>
                         <div class="user-roles">
-                            <div class="user-role">supersur</div>
-                            <div class="user-role">supersur</div>
-                            <div class="user-role">supersur</div>
+                            {% for role in roles.all %}
+                                <div class="user-role">role</div>
+                            {% endfor %}
                         </div>   
                     }</div>
                 </div>
                 <div class="user-dict-key">Пароль:</div>
-                <div class="user-dict-value"><div class="user-change-pass" href="">Изменить</div></div>
+                <div class="user-dict-value">
+                    <div class="user-change-pass" href="">Изменить</div>
+                    <div style="display: none;" class='user-change-status'>
+                        <div class="user-dict-value">Старый пароль</div>
+                        <input id="password" style="margin-bottom: 5px;" placeholder="Пароль" class="inputvs" type='text'>
+                        <div class="user-dict-value">Новый пароль</div>
+                        <input id="newpassword" style="margin-bottom: 5px;" placeholder="Пароль" class="inputvs" type='text'>
+                        <button class="goformsubmit user-change-pass-btn">Изменить</button>
+                        <button class="goformsubmit user-change-pass-cancel-btn">Отмена</button>
+                    </div>
+                </div>
             </div>
             <div class="user-hr"></div>
             <div class="user-own">
@@ -79,14 +89,22 @@
                         сборок
                     </div>
                 </div>
-                <div class="user-own-block">
+                <a href="" class="user-own-block">
                     <div class="user-own-block-count">
                         42
                     </div>
                     <div class="user-own-block-name">
                         файлы
                     </div>
-                </div>
+                </a>
+                <a href="{% url 'images_url' %}" class="user-own-block">
+                    <div class="user-own-block-count">
+                        8
+                    </div>
+                    <div class="user-own-block-name">
+                        картинки
+                    </div>
+                </a>
             </div>
         </div>
     </div>
@@ -97,13 +115,82 @@
 
 {% block script %}
     <script>
+        V('.user-change-pass').event({
+            events: ['click'],
+            funcs: [
+                function(e){
+                    V(this).hide();
+                    V(this).nextElement().show({
+                        speed: 250
+                    });
+                }
+            ]
+        });
+
+        V('.user-change-pass-btn').event({
+            events: ['click'],
+            funcs: [
+                function(e){
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+                    data.append('password', V('#password').val());
+                    data.append('newpassword', V('#newpassword').val());
+
+                    let response = fetch('{% url 'ajaxChangePass_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.text();
+                    }).then(data => {
+                        if(data == 'Готово!'){
+                            V(this).parent().hide({
+                                speed: 250
+                            });
+                            V(this).parent().prevElement().show();
+                        }
+                        alert(data);
+                    });
+                }
+            ]
+        });
+
+        V('.user-change-pass-cancel-btn').event({
+            events: ['click'],
+            funcs: [
+                function(e){
+                    V(this).parent().hide({
+                        speed: 250
+                    }).then(() => {
+                        V(this).parent().prevElement().show();
+                    });
+                }
+            ]
+        });
+
+        V('.user-status').event({
+            events: ['click'],
+            funcs: [
+                function(e){
+                    let elem = V(this);
+                    if(elem.hasClass('user-status-theme') && e.target == this){
+                        elem.toggleClass('user-status-theme');
+                        let statustext = elem.children('.user-status-text');
+                        let statusinput = elem.children('.user-change-status');
+                        statustext.hide();
+                        statusinput.children('input').val(statustext.text());
+                        statusinput.show();
+                    }
+                }
+            ]
+        });
+
         V('.user-status-text').event({
             events: ['click'],
             funcs: [
-                function(){
-                    let elem = V(this).parent('.user-status')
-                    if(elem.hasClass('user-status-theme')){
-
+                function(e){
+                    let elem = V(this).parent('.user-status');
+                    if(elem.hasClass('user-status-theme') && e.target == this){
                         elem.toggleClass('user-status-theme');
                         let statustext = elem.children('.user-status-text');
                         let statusinput = elem.children('.user-change-status');
@@ -120,13 +207,23 @@
             funcs: [
                 function(e){
                     e.preventDefault();
-                    let elem = V(this).parent('.user-status')
+                    let elem = V(this).parent('.user-status');
                     elem.toggleClass('user-status-theme');
                     let statustext = elem.children('.user-status-text');
                     let statusinput = elem.children('.user-change-status');
-                    statustext.show();  
+                    statustext.show();
                     statustext.text(statusinput.children('input').val());
                     statusinput.hide();
+                    
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+                    data.append('minitag', statusinput.children('input').val());
+
+                    let response = fetch('{% url 'ajaxChangeMiniTag_url' %}', {
+                        method: 'POST',
+                        body: data
+                    });
                 }
             ]
         });
@@ -134,7 +231,7 @@
         V('.user-own-block-count').forEach(element => {
             let count = element.text();
             let second = 2000 / count;
-            for(let i = 0; i < count; i++){
+            for(let i = 0; i <= count; i++){
                 setTimeout(() => {
                     element.text(i);
                 }, i * second);

@@ -28,182 +28,111 @@
                 </div>
                 <div class="count-in-category">
                     <div class="count">
-                        10
+                        {{ postspublic.count }}
                     </div>
                 </div>
             </div>
-            <div class="article-content-category-list">
-                <div class="scroll"></div>
-                <div data-art='post-1' class="post post-theme">
-                    <div class="post-img">
-                        <div style="
-                            background-image: url({% static 'image/1.jpg' %});
-                            background-size: cover;" class="post-source-img">
+            <div data-public="all" data-path="<div data-tree-id='None' class='node'>main</div>" class="article-content-category-list-active article-content-category-list">
+                {% comment %} <div class="scroll"></div> {% endcomment %}
+                {% for post in postspublic %}
+                    <div data-type-post="{{ post.type }}" data-id-post="{{ post.id }}" data-art='post-{{ post.id }}' class="post post-theme">
+                        <div class="post-img">
+                            <div style="background-image: url({{post.img.url}});" class="post-source-img"></div>
                         </div>
-                    </div>
-                    <div class="post-about">
-                        <div class="post-title">
-                            <div class="post-title-text-data">
+                        <div class="post-about">
+                            <div class="post-title">
                                 <div class="post-title-text">
-                                    Live Server
+                                    {{ post.title }}
                                 </div>
+                                <div class="post-statistic">
+                                    <div class="post-view">
+                                        3.6M
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-intro">
+                                {{post.intro}}
+                            </div>
+                            <div class="post-users-and-settings">
+                                <div class="post-user-create">{{post.user}}</div>
                                 <div class="post-data">
-                                    11.11.2020
+                                    {{ post.data }}
+                                </div>
+                                <div class="post-settings">
+                                    {% if post.public == True %}
+                                        <div class="post-hide">
+                                            
+                                        </div>
+                                    {% else %}
+                                        <div class="post-confirm">
+                                            
+                                        </div>
+                                    {% endif %}
+                                    <div class="post-delete">
+                                        
+                                    </div>
                                 </div>
                             </div>
-                            <div class="post-statistic">
-                                <div class="post-view">
-                                    3.6M
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-intro">
-                            Launch a development zsdsdasedsaefdsdefswefse 
-                        </div>
-                        <div class="post-users">
-                            Ritwick Dey
                         </div>
                     </div>
-                </div>
-                <div data-art='post-1' class="post post-theme">
-                    <div class="post-img">
-                        <div style="
-                            background-image: url({% static 'image/1.jpg' %});
-                            background-size: cover;" class="post-source-img">
-                        </div>
-                    </div>
-                    <div class="post-about">
-                        <div class="post-title">
-                            <div class="post-title-text-data">
-                                <div class="post-title-text">
-                                    Live Server
-                                </div>
-                                <div class="post-data">
-                                    11.11.2020
-                                </div>
-                            </div>
-                            <div class="post-statistic">
-                                <div class="post-view">
-                                    3.6M
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-intro">
-                            Launch a development zsdsdasedsaefdsdefswefse 
-                        </div>
-                        <div class="post-users">
-                            Ritwick Dey
-                        </div>
-                    </div>
-                </div>
-                <div data-art='post-1' class="post post-theme">
-                    <div class="post-img">
-                        <div style="
-                            background-image: url({% static 'image/1.jpg' %});
-                            background-size: cover;" class="post-source-img">
-                        </div>
-                    </div>
-                    <div class="post-about">
-                        <div class="post-title">
-                            <div class="post-title-text-data">
-                                <div class="post-title-text">
-                                    Live Server
-                                </div>
-                                <div class="post-data">
-                                    11.11.2020
-                                </div>
-                            </div>
-                            <div class="post-statistic">
-                                <div class="post-view">
-                                    3.6M
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-intro">
-                            Launch a development zsdsdasedsaefdsdefswefse 
-                        </div>
-                        <div class="post-users">
-                            Ritwick Dey
-                        </div>
-                    </div>
-                </div>
-                <div data-art='post-1' class="post post-theme">
-                    <div class="post-img">
-                        <div style="
-                            background-image: url({% static 'image/1.jpg' %});
-                            background-size: cover;" class="post-source-img">
-                        </div>
-                    </div>
-                    <div class="post-about">
-                        <div class="post-title">
-                            <div class="post-title-text-data">
-                                <div class="post-title-text">
-                                    Live Server
-                                </div>
-                                <div class="post-data">
-                                    11.11.2020
-                                </div>
-                            </div>
-                            <div class="post-statistic">
-                                <div class="post-view">
-                                    3.6M
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-intro">
-                            Launch a development zsdsdasedsaefdsdefswefse 
-                        </div>
-                        <div class="post-users">
-                            Ritwick Dey
-                        </div>
-                    </div>
-                </div>
-                <div data-art='post-2' class="post post-theme">
-                    <div class="post-img">
-                        <div style="
-                            background-image: url({% static 'image/1.jpg' %});
-                            background-size: cover;" class="post-source-img">
-                        </div>
-                    </div>
-                    <div class="post-about">
-                        <div class="post-title">
-                            <div class="post-title-text-data">
-                                <div class="post-title-text">
-                                    Live Server
-                                </div>
-                                <div class="post-data">
-                                    11.11.2020
-                                </div>
-                            </div>
-                            <div class="post-statistic">
-                                <div class="post-view">
-                                    3.6M
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post-intro">
-                            Launch a development zsdsdasedsaefdsdefswefse 
-                        </div>
-                        <div class="post-users">
-                            Ritwick Dey
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
             <div tabindex="1" class="article-content-category">
                 <div class="toggle-category">
                     >
                 </div>
                 <div class="name-category">
-                    Ваши
+                    Ваши / Не опубликованные
                 </div>
                 <div class="count-in-category">
                     <div class="count">
-                        1
+                        {{ yourposts.count }}
                     </div>
                 </div>
             </div>
-            <div style="display: none;" class="article-content-category-list">
+            <div data-public="login" data-path="<div data-tree-id='None' class='node'>main</div>" style="display: none;" class="article-content-category-list">
+                {% for post in yourposts %}
+                    <div data-type-post="{{ post.type }}" data-id-post="{{ post.id }}" data-art='post-{{ post.id }}' class="post post-theme">
+                        <div class="post-img">
+                            <div style="background-image: url({{post.img.url}});" class="post-source-img"></div>
+                        </div>
+                        <div class="post-about">
+                            <div class="post-title">
+                                <div class="post-title-text">
+                                    {{ post.title }}
+                                </div>
+                                <div class="post-statistic">
+                                    <div class="post-view">
+                                        3.6M
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="post-intro">
+                                {{post.intro}}
+                            </div>
+                            <div class="post-users-and-settings">
+                                <div class="post-user-create">{{post.user}}</div>
+                                <div class="post-data">
+                                    {{ post.data }}
+                                </div>
+                                <div class="post-settings">
+                                    {% if post.public == True %}
+                                        <div class="post-hide">
+                                            
+                                        </div>
+                                    {% else %}
+                                        <div class="post-confirm">
+                                            
+                                        </div>
+                                    {% endif %}
+                                    <div class="post-delete">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </article>
@@ -212,7 +141,10 @@
 {% block main %}
     <div class="blog-post">
         <div class="main-active-tabs"></div>
-        <div class="main-active-path"></div>
+        <div class="main-active-path">
+            <div data-tree-id="None" class="node">main</div>
+            {% comment %} <div class="next-node">></div> {% endcomment %}
+        </div>
     </div>
 {% endblock main %}
 
@@ -221,19 +153,26 @@
         <div class="flow-window-close"></div>
         <div class="newpost">
             <label class="loadimg lnewdata">
-                <img id="newimagepost" src="{% static 'image/1.jpg' %}" class="viewloadimg"></img>
-                <input class="inputloadimg" accept="image/*" type="file">
+                <div id="newimagepost" style="background-image: url({% static 'image/1.jpg' %});" class="viewloadimg"></div>
+                <input id="postimg" class="inputloadimg" accept="image/*" type="file">
             </label>
             <div class="newpostabout">
                 <label class="lnewdata">
                     <p class="newdata">Введите название статьи</p>
-                    <input style="font-size: 22px;" class="inputvs" placeholder="Название" type="text">
+                    <input id="posttitle" style="font-size: 22px;" class="inputvs" placeholder="Название" type="text">
                 </label>
                 <label class="lnewdata">
                     <p class="newdata">Введите описание статьи</p>
-                    <input style="font-size: 22px;" class="inputvs" placeholder="Название" type="text">
+                    <input id="postintro" style="font-size: 22px;" class="inputvs" placeholder="Название" type="text">
                 </label>
-                <button class="goformsubmit">Создать</button>
+                <label class="lnewdata">
+                    <p class="newdata">Тип</p>
+                    <select id="posttype">
+                        <option>Папка</option>
+                        <option>Файл</option>
+                    </select>
+                </label>
+                <button class="goformsubmit submitpost">Создать</button>
             </div>
         </div>
     </div>
@@ -241,6 +180,17 @@
 
 {% block script %}
     <script>
+        function updatePosts(){
+            let active_list = V('.article-content-category-list-active');
+            let lists = V('.article-content-category-list');
+            lists.forEach(element => {
+                element.click();
+                let nodes = V('.node');
+                nodes.get(nodes.count-1).click();
+            });
+            active_list.click();
+        }
+
         V('.article-content-category').event({
             events: ['click'],
             funcs: [
@@ -248,12 +198,19 @@
                     let elem = V(this);
                     elem.children('.toggle-category').toggleClass('toggle-category-open');
                     let next = elem.nextElement();
+
+                    /*if(!V(this).nextElement().hasClass('article-content-category-list-active') && V(this).nextElement().css('display') == 'none'){
+                        V('.article-content-category-list-active').removeClass('article-content-category-list-active');
+                        V(this).nextElement().addClass('article-content-category-list-active');
+                        V('.main-active-path').html(V('.article-content-category-list-active').attr('data-path'));
+                    }*/
                     next.toggleShow({
                         speed: 250
                     });
                 }
             ]
         });
+
         V('.nav-items').event({
             events: ['click'],
             funcs: [
@@ -276,87 +233,172 @@
         let main_tab = new VElement(
             `<div data-post-art-tab="{post}" class="main-active-tab main-active-tab-theme">
                 <div class="main-active-tab-icon"></div>
-                <div class="main-active-tab-name">Live Server</div>
+                <div class="main-active-tab-name">{title}</div>
                 <div class="main-active-tab-close-wrap"><div class="main-active-tab-close"></div></div>
             </div>`
         );
+
         let main_tab_content = new VElement(
-            `<div data-post-art-tab-content="{post}" class="main-post">
-                <div class="main-post-info">
-                    <div class="main-post-about">
-                        <div style="
-                        background-image: url('1.jpg');
-                        background-size: cover;" class="main-post-about-img">
+            `<div data-post-art-tab-content='{post}' class='main-post'>
+                <div class='main-post-info'>
+                    <div class='main-post-about'>
+                        <div style='background-image: {img};' class='main-post-about-img'>
                         </div>
-                        <div class="main-post-description">
-                            <div class="main-post-title">
-                                <div class="main-post-title-text">
-                                    {name}
+                        <div class='main-post-description'>
+                            <div class='main-post-title'>
+                                <div class='main-post-title-text'>
+                                    {title}
                                 </div>
                             </div>
-                            <div class="main-post-statistic">
-                                <div class="main-post-statistic-container">
-                                    Vantus
+                            <div class='main-post-statistic'>
+                                <div class='main-post-statistic-container'>
+                                    {user}
                                 </div>
-                                <div class="main-post-statistic-div"></div>
-                                <div class="main-post-statistic-container">
+                                <div class='main-post-statistic-div'></div>
+                                <div class='main-post-statistic-container'>
                                     3 601 928
                                 </div>
                             </div>
-                            <div class="main-post-intro">
-                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque inventore voluptatibus quibusdam optio error consequatur minus, incidunt nulla officiis, quos labore doloremque doloribus quidem iure, libero aspernatur maxime quam earum!
+                            <div class='main-post-intro'>
+                                {intro}
                             </div>
-                            <div class="main-post-like">
+                            <div class='main-post-like'>
                                 Лайки и репосты
                             </div>
                         </div>
                     </div>
-                    <div class="main-post-source">
-                        <div class="main-post-source-tabs">
-                            <div class="main-post-tab main-post-tab-active">
-                                Содержание
+                    <div class='main-post-source'>
+                        <div class='main-post-source-tabs'>
+                            <div class='main-post-title-toggle-show'><div>></div></div>
+                            <div class='main-post-tab'>
+                                <div data-num="0" class="main-post-tab-title main-post-tab-title-active">Содержание</div>
+                                <div style="display: grid;" class="main-post-tab-settings">
+                                    <div data-class=".article-text-editor" class="post-type post-type-active">T</div>
+                                    <div data-class=".article-html-editor" class="post-type">H</div>
+                                    <div data-class=".article-json-editor" class="post-type">JS</div>
+                                </div>
                             </div>
-                            <div class="main-post-tab">
-                                Шпаргалка
+                            <div class='main-post-tab'>
+                                <div data-num="1" class="main-post-tab-title">Шпаргалка</div>
+                                <div class="main-post-tab-settings">бла бла</div>
                             </div>
-                            <div class="main-post-tab">
-                                Журнал изменений
+                            <div class='main-post-tab'>
+                                <div data-num="2" class="main-post-tab-title">Журнал изменений</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="main-post-content">
-                    <div class="post-tab-content-1 post-tab-content post-tab-content-actve">
+                <div class='main-post-content'>
+                    <div class='post-tab-content-1 post-tab-content post-tab-content-actve'>
+                        <div class="article-text-editor">
+                            <div class="blocks-with-content">
+                                <div class="add-block"></div>
+                            </div>
+                            <div class="block-editor">
+
+                            </div>
+                        </div>
+                        <div style="display: none;" class="article-html-editor">
+                            
+                        </div>
+                        <div style="display: none;" class="article-json-editor">
+                            
+                        </div>
+                    </div>
+                    <div class='post-tab-content-2 post-tab-content'>
 
                     </div>
-                    <div class="post-tab-content-2 post-tab-content">
-
-                    </div>
-                    <div class="post-tab-content-3 post-tab-content">
+                    <div class='post-tab-content-3 post-tab-content'>
                         
                     </div>
                 </div>
             </div>`
         );
 
-        V('.post').event({
+        let new_post = new VElement(
+            `<div data-type-post="{type}" data-id-post="{id}" data-art="post-{id}" class="post post-theme">
+                <div class="post-img">
+                    <div style="background-image: url({img});" class="post-source-img"></div>
+                </div>
+                <div class="post-about">
+                    <div class="post-title">
+                        <div class="post-title-text">
+                            {title}
+                        </div>
+                        <div class="post-statistic">
+                            <div class="post-view">
+                                3.6M
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-intro">
+                        {intro}
+                    </div>
+                    <div class="post-users-and-settings">
+                        <div class="post-user-create">Vantus</div>
+                        <div class="post-data">
+                            {data}
+                        </div>
+                        <div class="post-settings">
+                            <div class="post-{confirm}">
+                                
+                            </div>
+                            <div class="post-delete">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+        );
+
+        V('.main-active-path').event({
             events: ['click'],
             funcs: [
                 function(e) {
-                    let postt = V(this).attr('data-art');
-                    let main_actve = V(`div[data-post-art-tab="${postt}"]`);
-                    if(main_actve.count == 0){
-                        main_tab.render(V('.main-active-tabs'), 'prepend',{
-                            post: postt
-                        });
-                        main_tab_content.render(V('.blog-post'), 'append',{
-                            post: postt,
-                            name: postt
-                        });
-                    }
-                        
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+
+                    let active_list = V('.article-content-category-list-active');
+                    
+                    active_list.children().remove();
+                    
+                    V(this).nextAll().remove();
+                    
+                    V('.article-content-category-list-active').attr('data-path', V('.main-active-path').html());
+
+                    data.append('id', V(this).attr('data-tree-id').trim());
+                    data.append('public', V('.article-content-category-list-active').attr('data-public').trim());
+
+                    let response = fetch('{% url 'ajaxGetDir_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.json();
+                    }).then(text => {
+                        for(i of text){
+                            let public = i['fields']['public'];
+                            let confirm = '';
+                            if(public == true)
+                                confirm = 'hide';
+                            else confirm = 'confirm';
+                            new_post.render(active_list, 'append',{
+                                img: '/media/' + i['fields']['img'],
+                                id: i['pk'],
+                                title: i['fields']['title'],
+                                type: i['fields']['type'],
+                                intro: i['fields']['intro'],
+                                data: i['fields']['creation_data'],
+                                confirm: confirm
+                            });
+                        }
+                        active_list.prevElement().children('.count').text(text.length);
+                    });/**/
                 }
-            ]
+            ],
+            elements: ['.node'],
+            float: true
         });
 
         V('.main-active-tabs').event({
@@ -373,35 +415,56 @@
             elements: ['.main-active-tab-icon', '.main-active-tab-name']
         });
 
-        V('body').event({
+        V('.blog-post').event({
             events: ['click'],
             funcs: [
                 function(e) {
-                    console.log(0);
-                    let postTab = 0;
-                    let Tabs = V(this).parent().children('.main-post-tab');
+                    let postTab = V(this).attr('data-num');
                     let TabsContent = V(this).parent('.main-post').children('.post-tab-content');
-                    V(this).parent().children('.main-post-tab-active').removeClass('main-post-tab-active');
+                    let active = V(this).parent('.main-post-source-tabs').children('.main-post-tab-title-active');
 
-                    Tabs.for((index, element, mass) => {
-                        if(mass[index] != e.target){
-                            postTab+=1
-                            return true;
-                        }
-                        else {
-                            element.addClass('main-post-tab-active');
-                            return false;
-                        }
-                    });
+                    let next = V(this).nextElement();
+                    if(!V(this).hasClass('main-post-tab-title-active')){
+                        V('.main-post-tab-settings').forEach(element => {
+                            if(element.css('display') != 'none')
+                                element.hide({
+                                    speed: 100,
+                                    display: 'none',
+                                    direction: 'w'
+                                });
+                        });
+                    }
+
+                    active.removeClass('main-post-tab-title-active');
+
+                    if(next){
+                        next.toggleShow({
+                            speed: 100,
+                            display: 'grid',
+                            direction: 'w'
+                        });
+                    }
+
+                    V(this).addClass('main-post-tab-title-active');
 
                     V(this).parent('.main-post').children('.post-tab-content-actve').removeClass('post-tab-content-actve');
-                    TabsContent.get(postTab).toggleClass('post-tab-content-actve');
+                    TabsContent.get(postTab).addClass('post-tab-content-actve');
                 }
             ],
-            elements: ['.main-post-tab']
+            elements: ['.main-post-tab-title']
         });
 
-        V('body').event({
+        V('.blog-post').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    alert(0);
+                }
+            ],
+            elements: ['.post-tab-content-1']
+        });
+
+        V('.blog-post').event({
             events: ['click'],
             funcs: [
                 function(e) {
@@ -411,6 +474,34 @@
                 }
             ],
             elements: ['.main-active-tab-close']
+        });
+        
+        V('.blog-post').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    V('.post-type-active').removeClass('post-type-active');
+                    V(this).addClass('post-type-active');
+                    V(this).parent('.main-post').children('.post-tab-content-1').children().hide();
+                    V(this).parent('.main-post').children('.post-tab-content-1').children(V(this).attr('data-class')).show();
+                }
+            ],
+            elements: ['.post-type']
+        });
+
+        V('.blog-post').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    V(this).parent('.main-post-source-tabs').children('.main-post-title-toggle-show').toggleClass('main-post-title-toggle-show-active');
+
+                    V(this).parent('.main-post-info').children('.main-post-about').toggleShow({
+                        speed: 250,
+                        display: 'grid'
+                    });
+                }
+            ],
+            elements: ['.main-post-title-toggle-show', '.main-post-title-toggle-show div']
         });
 
         V('.article-title-settings-add').event({
@@ -442,7 +533,7 @@
                         if (input.files[0].type.match('image.*')) {
                             var reader = new FileReader();
                             reader.onload = function (e) {
-                                V('#newimagepost').attr('src', e.target.result);
+                                V('#newimagepost').css({'background-image': 'url(' + e.target.result + ')'});
                             }
                             reader.readAsDataURL(input.files[0]);
                         } else {
@@ -453,6 +544,203 @@
                     }
                 },
             ]
+        });
+
+        V('.submitpost').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+
+                    let path = V('.node');
+                    let count_node = path.count;
+
+                    data.append('parent', path.get(count_node-1).attr('data-tree-id'));
+                    data.append('title', V('#posttitle').val());
+                    data.append('intro', V('#postintro').val());
+                    data.append('type', V('#posttype').val());
+                    data.append('img', V('#postimg').array()[0].files[0]);
+
+                    let response = fetch('{% url 'ajaxAddPost_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.text();
+                    }).then(data => {
+                        alert(data);
+                    });/**/
+                }
+            ]
+        });
+
+        V('.article-content-category-list').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    V(this).parent('.article-content-category-list').click();
+                    if(!V(e.target).hasClass('post-delete') && !V(e.target).hasClass('post-confirm') && !V(e.target).hasClass('post-hide')){
+                        let main_elem = V(this).parent('.post');
+                        let post = main_elem.attr('data-art');
+                        let post_type = main_elem.attr('data-type-post');
+                        let id = main_elem.attr('data-id-post');
+                        let title = main_elem.children('.post-title-text').text();
+                        let img = main_elem.children('.post-source-img').css('background-image');
+                        let user = main_elem.children('.post-user-create').text();
+                        let intro = main_elem.children('.post-intro').text();
+                        var data = new FormData();
+                        let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                        data.append('csrfmiddlewaretoken', csrf);
+
+                        if(post_type != 'Папка'){
+                            data.append('id', id);
+
+                            let response = fetch('{% url 'ajaxGetPostText_url' %}', {
+                                method: 'POST',
+                                body: data
+                            }).then(prom =>{
+                                return prom.text();
+                            }).then(text => {
+                                let main_actve = V(`div[data-post-art-tab="${post}"]`);
+                                if(main_actve.count == 0){
+                                    main_tab.render(V('.main-active-tabs'), 'prepend',{
+                                        post: post,
+                                        title: title
+                                    });
+                                    main_tab_content.render(V('.blog-post'), 'append',{
+                                        post: post,
+                                        title: title,
+                                        img: img,
+                                        user: user,
+                                        intro: intro,
+                                        text: text
+                                    });
+                                }
+                            });
+                        }
+                        else{
+                            let list = V(this).parent('.article-content-category-list');
+                            list.children().remove();
+                            
+                            V('.main-active-path').put(`<div class="next-node">></div>`, 'beforeEnd');
+                            V('.main-active-path').put(`<div data-tree-id="${id}" class="node">${title}</div>`, 'beforeEnd');
+
+                            V('.article-content-category-list-active').attr('data-path', V('.main-active-path').html());
+
+                            data.append('id', id.trim());
+                            data.append('public', V('.article-content-category-list-active').attr('data-public').trim());
+
+                            let response = fetch('{% url 'ajaxGetDir_url' %}', {
+                                method: 'POST',
+                                body: data
+                            }).then(prom =>{
+                                return prom.json();
+                            }).then(text => {
+                                /*for(i of text){
+                                    console.log(i);
+                                    new_post.render(list, 'append',{
+                                        img: '/media/' + i['fields']['img'],
+                                        id: i['pk'],
+                                        title: i['fields']['title'],
+                                        type: i['fields']['type'],
+                                        intro: i['fields']['intro'],
+                                        data: i['fields']['creation_data']
+                                    });
+                                }*/
+                                
+                                for(i of text){
+                                    let public = i['fields']['public'];
+                                    let confirm = '';
+                                    if(public == true)
+                                        confirm = 'hide';
+                                    else confirm = 'confirm';
+                                    new_post.render(list, 'append',{
+                                        img: '/media/' + i['fields']['img'],
+                                        id: i['pk'],
+                                        title: i['fields']['title'],
+                                        type: i['fields']['type'],
+                                        intro: i['fields']['intro'],
+                                        data: i['fields']['creation_data'],
+                                        confirm: confirm
+                                    });
+                                }
+                                list.prevElement().children('.count').text(text.length);
+                            });
+                        }
+                    }
+                }
+            ],
+            elements: ['.post'],
+            float: true
+        });
+
+        V('.article-content-category-list').event({
+            events: ['click'],
+            funcs: [
+                function(e){
+                    let success = confirm('Удалить?');
+                    if(success){
+                        let elem = V(this).parent('.post');
+                        let id = elem.attr('data-id-post');
+                        var data = new FormData();
+
+                        let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                        data.append('csrfmiddlewaretoken', csrf);
+
+                        data.append('id', id);
+
+                        let response = fetch('{% url 'ajaxDeletePost_url' %}', {
+                            method: 'POST',
+                            body: data
+                        }).then(prom =>{
+                            return prom.text();
+                        }).then(text => {
+                            elem.remove();
+                        });
+                    }
+                }
+            ],
+            elements: ['.post-delete']
+        });
+
+        V('.article-content-category-list').event({
+            events: ['click'],
+            funcs: [
+                function(e){
+                    if(!V(this).hasClass('article-content-category-list-active')){
+                        V('.article-content-category-list-active').removeClass('article-content-category-list-active');
+                        V(this).addClass('article-content-category-list-active');
+                        V('.main-active-path').html(V('.article-content-category-list-active').attr('data-path'));
+                    }
+                }
+            ]
+        });
+
+        V('.article-content-category-list').event({
+            events: ['click'],
+            funcs: [
+                function(e){
+                    let elem = V(this).parent('.post');
+                    let id = elem.attr('data-id-post');
+                    var data = new FormData();
+
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+
+                    data.append('id', id);
+
+                    let response = fetch('{% url 'ajaxPublicationPost_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.text();
+                    }).then(text => {
+                        updatePosts();
+                    });
+                }
+            ],
+            elements: ['.post-confirm', '.post-hide']
         });
     </script>
 {% endblock script %}

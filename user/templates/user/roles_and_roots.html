@@ -1,6 +1,7 @@
 {% extends 'base/main.html' %}
 
 {% block main %}
+    {% load json %}
     <div class="roles_and_roots">
         <div class="roles">
             <div class="role_add">
@@ -9,26 +10,376 @@
             </div>
             <div class="user-hr"></div>
             <div class="role_list">
-                <div class="role">
-                    <div class="role-name">
-                        supruser
+                {% for role in roles %}
+                    <div class="role" 
+                            {% if role.settings|json:"color" %}
+                            style="color: {{ role.settings|json:"color" }};
+                            background: {{ role.settings|json:"background" }};"
+                            {% endif %}>
+                        <div data-id="{{ role.id }}" class="role-name">
+                            {{ role.name }}
+                        </div>
+                        <div class="role-delete"><div class="post-settings"></div></div>
                     </div>
-                    <div class="role-settings">
-                        <div class="role-settings-points"></div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
         <div class="roots">
-            <div>Настройка прав пользователей сайта</div>
-            <div class="user-hr"></div>
+            <div style="margin-bottom: 10px;">Настройка прав пользователей сайта</div>
+            <label class="lnewdata">
+                <div class="category-root">Название парава</div>
+                <input id="rootname" class="inputvs" placeholder="Название" type="text">
+            </label>
+            <label class="lnewdata">
+                <div class="category-root">Описание права</div>
+                <input id="rootdescription" class="inputvs" placeholder="Описанире" type="text">
+            </label>
+            <button id="rootgo" class="goformsubmit">Создать</button>
+            <div class="user-root-hr"></div>
             <div class="category-root">Название роли</div>
-            <input class="input-big inputvs" placeholder="Название" type="text">
-            <div class="category-root">Цвет роли</div>
+            <input id="role-input-name" class="input-big inputvs" placeholder="Название" type="text">
+            <div class="user-root-hr"></div>
             {% comment %}  {% endcomment %}
+
+            <div class="category-root">Цвет роли</div>
+
+            <div class="role-colors">
+                <div class="role-colors-input">
+                    <label class="input-color">
+                        <div style="background-color: #3c3c3c;" class="input-color-fake"></div>
+                        <input id="background-input" type="color">
+                    </label>
+                    <label class="input-color">
+                        <div style="background-color: #fff;" class="input-color-fake"></div>
+                        <input val="#fff" id="color-input" type="color">
+                    </label>
+                </div>
+                <div class="role-colors-default">
+                        {% comment %} <div style="background-color: #1abc9c;" class="role-color-default"></div>
+                        <div style="background-color: #2ecc71;" class="role-color-default"></div>
+                        <div style="background-color: #3498db;" class="role-color-default"></div>
+                        <div style="background-color: #9b59b6;" class="role-color-default"></div> {% endcomment %}
+                </div>
+            </div>
+
+            <div class="user-root-hr"></div>
             <div class="category-root">Просмотр сайта от лица роли</div>
+            <div class="user-root-hr"></div>
+
+            {% comment %}  {% endcomment %}
+
             <div class="category-root">Настройки роли</div>
-            <div class="category-root">Основные роли</div>
+            <div class="checkbox-root-content">
+                <label class="checkbox-root">
+                        <div class="checkbox-root-name">Позволить всем упоминать эту роль</div>
+                        <div class="checkbox-root-checking">
+                            <div class="checkbox-root-btn">
+                                <input type="checkbox" class="checkbox-input">
+                                <div class="checkbox-root-flow-btn"></div>
+                            </div>
+                        </div>
+                </label>
+                <div class="checkbox-root-description"></div>
+            </div>
+            <div class="user-root-hr"></div>
+
+            {% comment %}  {% endcomment %}
+
+            <div class="category-root">Основные права</div>
+            <form>
+                <input id="roots-reset" type="reset">
+                {% for root in roots %}
+                    <div class="checkbox-root-content">
+                        <label class="main-root checkbox-root">
+                                <div class="checkbox-root-name-main checkbox-root-name">{{ root.name }}</div>
+                                <div class="checkbox-root-checking">
+                                    <div class="checkbox-root-btn">
+                                        <input type="checkbox" class="checkbox-input">
+                                        <div class="checkbox-root-flow-btn"></div>
+                                    </div>
+                                </div>
+                        </label>
+                        <div class="checkbox-root-description">{{ root.description }}</div>
+                    </div>
+                {% endfor %}
+            </form>
+        </div>
+    </div>
+
+    <div class="save-and-reset save-and-reset-show">
+        <div class="save-and-reset-text">Аккуратно, вы не сохранили изменения!</div>
+        <div class="save-and-reset-btns">
+            <div class="save-and-reset-btn-1">Сброс</div>
+            <button class="save-and-reset-btn-2">Сохранить изменения</button>
         </div>
     </div>
 {% endblock main %}
+
+
+{% block script %}
+
+    <script>
+        let new_role = new VElement(`
+            <div class="role">
+                <div class="role-name">
+                    {NewRole}
+                </div>
+                <div class="role-settings">
+                    <div class="role-settings-points"></div>
+                </div>
+            </div>
+        `);
+
+        V('.role_add').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+                    data.append('name', 'NewRole');
+
+                    let response = fetch('{% url 'ajaxAddRole_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.text();
+                    }).then(data => {
+                        if(data == 'Роль добавлена!'){
+                            new_role.render(V('.role_list'), 'append', {
+                                NewRole: 'NewRole'
+                            });
+                        }
+                        alert(data);
+                    });
+                }
+            ]
+        });
+
+        V('.input-color input').event({
+            events: ['change'],
+            funcs: [
+                function(){
+                    let elem = V(this);
+                    elem.prevElement().css({
+                        'background-color': elem.val()
+                    });
+                    V(`.role-active`).css({
+                        'background-color': V('#background-input').prevElement().css('background-color'),
+                        'color': V('#color-input').prevElement().css('background-color'),
+                    });
+                    console.log(V('#color-input').val());
+                }
+            ]
+        });
+
+        V('.role').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    V('#roots-reset').click();
+                    V('.role-active').removeClass('role-active');
+                    V(this).addClass('role-active');
+
+                    let name = V(this).children('.role-name').text();
+                    V('#role-input-name').val(name.trim());
+                    V('#role-input-name').attr('data-id', V(this).children('.role-name').attr('data-id'));
+                    
+                    V('.checkbox-input, .input-big, input[type="color"]').attr('disabled', '');
+                    V('.checkbox-root-flow-btn, .input-big').css({
+                        'opacity': ''
+                    });
+                    let bc = V(this).css(['background-color', 'color']);
+                    V('#background-input').prevElement().css({
+                        'background-color' : bc.get('background-color'),
+                    });
+                    V('#color-input').prevElement().css({
+                        'background-color' : bc.get('color'),
+                    });
+
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+
+                    data.append('id', V('.role-active').children('.role-name').attr('data-id'));
+
+                    let response = fetch('{% url 'ajaxGetFreedoms_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.json();
+                    }).then(data => {
+                        let rolename = V('.checkbox-root-name-main');
+                        rolename.forEach(element => {
+                            if(data['freedoms'].indexOf(element.text().trim()) != -1)
+                                element.nextElement().children('.checkbox-input').attr('checked', true);
+                            else element.nextElement().children('.checkbox-input').attr('checked', false);
+                        });
+                    });
+                }
+            ]
+        });
+
+        V('.role-settings').event({
+            events: ['focus', 'blur'],
+            funcs: [
+                function(){
+                    V(this).children('.role-settings-window').show({
+                        speed: 250,
+                        direction: 'wh'
+                    });
+                },
+                function(){
+                    V(this).children('.role-settings-window').hide({
+                        speed: 250,
+                        direction: 'wh'
+                    });
+                }
+            ]
+        });
+
+        V('.role-delete').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+                    data.append('id', V(this).parent('.role').children('.role-name').attr('data-id'));
+
+                    let response = fetch('{% url 'ajaxDeleteRole_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.text();
+                    }).then(data => {
+                        if(data == 'Роль удалена!')
+                            V(this).parent('.role').remove();
+                        alert(data);
+                    });
+                }
+            ]
+        }); 
+
+        V('.checkbox-input, .input-big, input[type="color"]').attr('disabled', true);
+        V('.checkbox-root-flow-btn, .input-big').css({
+            'opacity': 0.3
+        });
+
+        V('.checkbox-input, .input-big, input[type="color"]').event({
+            events: ['change'],
+            funcs: [
+                function(){
+                    V('.save-and-reset').css({
+                        'display' : 'flex'
+                    });
+                }
+            ]
+        });
+
+        V('.save-and-reset-btn-1').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    let elem = V(this).parent('.save-and-reset');
+                    elem.addClass('save-and-reset-hide');
+                    setTimeout(function(){
+                        V('.save-and-reset').css({
+                            'display' : ''
+                        });
+                        elem.removeClass('save-and-reset-hide');
+                    }, 550);
+                }
+            ]
+        });
+
+        V('.save-and-reset-btn-2').event({
+            events: ['click'],
+            funcs: [
+                function(){                    
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+
+                    data.append('rolename', V('#role-input-name').val());
+
+                    let settings = {};
+                    settings['background'] = V('#background-input').prevElement().css('background-color');
+                    settings['color'] = V('#color-input').prevElement().css('background-color');
+                    data.append('rolesettings', JSON.stringify(settings));
+                    data.append('roleid', V('#role-input-name').attr('data-id'));
+
+                    let roots = V('.main-root');
+                    let inputs = roots.children('.checkbox-input');
+                    let add = [];
+                    let remove = [];
+
+                    inputs.for((index, element, mass) => {
+                        if(mass[index].checked)
+                            add.push(element.parent('.main-root').children('.checkbox-root-name').text());
+                        else remove.push(element.parent('.main-root').children('.checkbox-root-name').text());
+                        return true;
+                    });
+                    data.append('add', add);
+                    data.append('remove', remove);
+
+                    let response = fetch('{% url 'ajaxUpdateRole_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.text();
+                    }).then(data => {
+                        let elem = V(this).parent('.save-and-reset');
+                        elem.addClass('save-and-reset-hide');
+                        setTimeout(function(){
+                            V('.save-and-reset').css({
+                                'display' : ''
+                            });
+                            elem.removeClass('save-and-reset-hide');
+                        }, 550);
+                    });
+                }
+            ]
+        });
+
+        let new_root = new VElement(`
+            <div class="checkbox-root-content">
+                <label class="checkbox-root">
+                        <div class="checkbox-root-name">{root.name}</div>
+                        <div class="checkbox-root-checking">
+                            <div class="checkbox-root-btn">
+                                <input type="checkbox" class="checkbox-input">
+                                <div class="checkbox-root-flow-btn"></div>
+                            </div>
+                        </div>
+                </label>
+                <div class="checkbox-root-description">{root.description}</div>
+            </div>
+        `);
+
+        V('#rootgo').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+
+                    data.append('name', V('#rootname').val());
+                    data.append('description', V('#rootdescription').val());
+
+                    let response = fetch('{% url 'ajaxAddRoot_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.text();
+                    }).then(data => {
+                        new_root.render(V('.roots'), 'append');
+                    });
+                }
+            ]
+        });
+    
+    </script>
+
+{% endblock script %}
