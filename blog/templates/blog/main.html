@@ -139,7 +139,7 @@
 {% endblock article %}
 
 {% block main %}
-    <div class="blog-post">
+    <div tabindex="10" class="blog-post">
         <div class="main-active-tabs"></div>
         <div class="main-active-path">
             <div data-tree-id="None" class="node">main</div>
@@ -180,55 +180,6 @@
 
 {% block script %}
     <script>
-        function updatePosts(){
-            let active_list = V('.article-content-category-list-active');
-            let lists = V('.article-content-category-list');
-            lists.forEach(element => {
-                element.click();
-                let nodes = V('.node');
-                nodes.get(nodes.count-1).click();
-            });
-            active_list.click();
-        }
-
-        V('.article-content-category').event({
-            events: ['click'],
-            funcs: [
-                function(e) {
-                    let elem = V(this);
-                    elem.children('.toggle-category').toggleClass('toggle-category-open');
-                    let next = elem.nextElement();
-
-                    /*if(!V(this).nextElement().hasClass('article-content-category-list-active') && V(this).nextElement().css('display') == 'none'){
-                        V('.article-content-category-list-active').removeClass('article-content-category-list-active');
-                        V(this).nextElement().addClass('article-content-category-list-active');
-                        V('.main-active-path').html(V('.article-content-category-list-active').attr('data-path'));
-                    }*/
-                    next.toggleShow({
-                        speed: 250
-                    });
-                }
-            ]
-        });
-
-        V('.nav-items').event({
-            events: ['click'],
-            funcs: [
-                function(e) {
-                    let elem = V(this).children('.nav-item-active');
-                    let el2 = V(this).children('.nav-item');
-                    if(el2.hasClass('nav-item-active-theme')){
-                        e.preventDefault();
-                        V('article').toggleShow({
-                            display: 'grid',
-                            direction: 'w',
-                            speed: 100
-                        });
-                        elem.toggleClass('nav-item-active-theme');
-                    }
-                }
-            ]
-        });
 
         let main_tab = new VElement(
             `<div data-post-art-tab="{post}" class="main-active-tab main-active-tab-theme">
@@ -292,10 +243,23 @@
                     <div class='post-tab-content-1 post-tab-content post-tab-content-actve'>
                         <div class="article-text-editor">
                             <div class="blocks-with-content">
-                                <div class="add-block"></div>
+                                <div data-add="after" class="add-block"></div>
+                                <div data-block-type="1" class="new-block"></div>
+                                <div data-add="before" class="add-block"></div>
                             </div>
                             <div class="block-editor">
-
+                                <div class="block-editor-types">
+                                    <div data-block-type="1" class="block-editor-type block-editor-type-rows">
+                                        <div class=""></div>
+                                        <div class=""></div>
+                                        <div class=""></div>
+                                    </div>
+                                    <div data-block-type="2" class="block-editor-type block-editor-type-columns">
+                                        <div class=""></div>
+                                        <div class=""></div>
+                                        <div class=""></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div style="display: none;" class="article-html-editor">
@@ -314,6 +278,8 @@
                 </div>
             </div>`
         );
+        
+        let new_block_content = new VElement(`<div data-block-type="1" class="new-block">{val}</div>`);
 
         let new_post = new VElement(
             `<div data-type-post="{type}" data-id-post="{id}" data-art="post-{id}" class="post post-theme">
@@ -351,6 +317,59 @@
                 </div>
             </div>`
         );
+        
+        let textarea = new VElement(`<textarea onblur="blurTextarea(this)" class="inputvs new-textarea">{text}</textarea>`);
+        let addBlock = new VElement(`<div data-add="{where}" class="add-block"></div>`);
+        
+        function updatePosts(){
+            let active_list = V('.article-content-category-list-active');
+            let lists = V('.article-content-category-list');
+            lists.forEach(element => {
+                element.click();
+                let nodes = V('.node');
+                nodes.get(nodes.count-1).click();
+            });
+            active_list.click();
+        }
+
+        V('.article-content-category').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    let elem = V(this);
+                    elem.children('.toggle-category').toggleClass('toggle-category-open');
+                    let next = elem.nextElement();
+
+                    /*if(!V(this).nextElement().hasClass('article-content-category-list-active') && V(this).nextElement().css('display') == 'none'){
+                        V('.article-content-category-list-active').removeClass('article-content-category-list-active');
+                        V(this).nextElement().addClass('article-content-category-list-active');
+                        V('.main-active-path').html(V('.article-content-category-list-active').attr('data-path'));
+                    }*/
+                    next.toggleShow({
+                        speed: 250
+                    });
+                }
+            ]
+        });
+
+        V('.nav-items').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    let elem = V(this).children('.nav-item-active');
+                    let el2 = V(this).children('.nav-item');
+                    if(el2.hasClass('nav-item-active-theme')){
+                        e.preventDefault();
+                        V('article').toggleShow({
+                            display: 'grid',
+                            direction: 'w',
+                            speed: 100
+                        });
+                        elem.toggleClass('nav-item-active-theme');
+                    }
+                }
+            ]
+        });
 
         V('.main-active-path').event({
             events: ['click'],
@@ -458,7 +477,7 @@
             events: ['click'],
             funcs: [
                 function(e) {
-                    alert(0);
+                    //alert(0);
                 }
             ],
             elements: ['.post-tab-content-1']
@@ -741,6 +760,156 @@
                 }
             ],
             elements: ['.post-confirm', '.post-hide']
+        });
+
+
+        V('.blog-post').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    let where = V(this).attr('data-add');
+                    new_block_content.render(V(this), where,{
+                        val: ''
+                    });
+                }
+            ],
+            elements: ['.add-block']
+        });
+
+        function simplify(e = false){
+            let elem = V('.new-block-active');
+            if(elem.count){
+                let parent = elem.parent();
+                let children = elem.parent().children();
+                if(parent.hasClass('new-block') && children.count == 1){
+                    let text = elem.html();
+                    elem.remove();
+                    parent.html(text);
+                }
+                if(e != false){
+                    if(!e.ctrlKey){
+                        let child = elem.children('.new-block')
+                        if(child.count == 1){
+                            let html = child.get(0).html();
+                            child.get(0).remove();
+                            elem.html(html);
+                        }
+                    }
+                    
+                }
+            }
+
+        }
+
+        function blurTextarea(elem){
+            let text = V(elem).val();
+            V(elem).parent().html(text);
+            V(elem).remove();
+            simplify();
+        }
+
+        function newBlock(e, param){
+            let elem = V(param);
+            let bool = false
+            
+            if(!V(e.target).hasClass('new-block') && e.target.tagName != 'TEXTAREA'){
+                elem = elem.parent('.new-block');
+                bool = true;
+            }
+
+            let parent = elem.parent();
+            e.defaultPrevented = true;
+            if(e.target == param || bool){
+                if(!elem.hasClass('new-block-active') || bool){
+                    V('.new-block-active').children('.add-block').remove();
+                    simplify(e);
+                    V('.new-block-active').removeClass('new-block-active');
+
+                    elem.addClass('new-block-active');
+                    let types = V('.block-editor-types');
+                    let changetype = types.children();
+                    changetype.removeClass('block-editor-type-active');
+                    let istype = elem.attr('data-block-type');
+                    //changetype.get(istype).addClass('block-editor-type-active');
+                    types.children(`div[data-block-type="${istype}"]`).addClass('block-editor-type-active');
+                    if(!e.ctrlKey){
+                        if(parent.hasClass('new-block') ? parent.children('.new-block').count > 1 : true){
+                            if(elem.children('.new-block').count == 0){
+                                let val = '';
+                                if(elem.html() != ''){
+                                    val = elem.html();
+                                    elem.html('');
+                                }
+
+                                new_block_content.render(elem, 'append', {
+                                    val: val
+                                });
+                            }
+                                
+                            addBlock.render(elem, 'prepend', {
+                                where: 'after'
+                            });
+                            addBlock.render(elem, 'append', {
+                                where: 'before'
+                            });
+                        }
+                        else{
+                            let text = elem.text().trim();
+                            elem.text('');
+                            textarea.render(elem, 'append', {
+                                text: text
+                            });
+                            elem.children('textarea').elem(0).focus();
+                        }
+                    }
+                    if(e.ctrlKey){
+                        if(elem.children('.new-block').count == 0){
+                            let text = elem.html().trim();
+                            elem.html('');
+                            textarea.render(elem, 'append', {
+                                text: text
+                            });
+                            elem.children('textarea').elem(0).focus();
+                        }
+                    }
+                }
+            }
+        }
+
+        V('.blog-post').event({
+            events: ['click'],//'mouseover', 'mouseout'
+            funcs: [
+                function(e){
+                    newBlock(e, this);
+                }
+            ],
+            elements: ['.new-block', 'p']
+        });/**/
+
+        V('.blog-post').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    let active_block = V('.new-block-active');
+                    if(active_block.count != 0){
+                        let types = V('.block-editor-types');
+                        let changetype = types.children();
+                        changetype.removeClass('block-editor-type-active');
+                        let attr = parseInt(V(this).attr('data-block-type'));
+                        V(this).addClass('block-editor-type-active');
+
+                        if(attr == 1){
+                            active_block.removeClass('new-block-row');
+                        }
+                        else if(attr == 2){
+                            active_block.addClass('new-block-row');
+                        }
+
+                        active_block.attr('data-block-type', attr);
+                    }
+                }
+            ],
+            elements: ['.block-editor-type']
         });
     </script>
 {% endblock script %}

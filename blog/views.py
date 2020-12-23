@@ -82,4 +82,3 @@ class ajaxGetDir(View):
 
         data = serializers.serialize('json', m_posts)
         return HttpResponse(data)
-    
