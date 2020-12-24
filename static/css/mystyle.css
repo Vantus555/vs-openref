@@ -1038,12 +1038,16 @@ main > h1{
 }
 
 .block-editor-type{
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 15px;
     box-sizing: border-box;
     margin: 0 8px;
     grid-auto-columns: 3px;
     width: 50px;
     height: 25px;
     background-color: #212226;
+    color: #6f6f6f;
     border-radius: 10px;
     cursor: pointer;
     display: flex;
@@ -1827,4 +1831,11 @@ main > h1{
 
 .gallery-image:hover{
     opacity: 0.6;
+}
+
+.separator{
+    width: 2px;
+    border-radius: 20px;
+    background-color: #00ff08;
+    margin: 0px 5px;
 }

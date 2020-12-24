@@ -244,21 +244,29 @@
                         <div class="article-text-editor">
                             <div class="blocks-with-content">
                                 <div data-add="after" class="add-block"></div>
-                                <div data-block-type="1" class="new-block"></div>
+                                <div data-block-direction="1" class="new-block"></div>
                                 <div data-add="before" class="add-block"></div>
                             </div>
                             <div class="block-editor">
                                 <div class="block-editor-types">
-                                    <div data-block-type="1" class="block-editor-type block-editor-type-rows">
+                                    <div data-block-direction="1" class="block-editor-type block-direction block-editor-type-rows">
                                         <div class=""></div>
                                         <div class=""></div>
                                         <div class=""></div>
                                     </div>
-                                    <div data-block-type="2" class="block-editor-type block-editor-type-columns">
+                                    <div data-block-direction="2" class="block-editor-type block-direction block-editor-type-columns">
                                         <div class=""></div>
                                         <div class=""></div>
                                         <div class=""></div>
                                     </div>
+                                    <div class="separator"></div>
+                                    <div data-block-display="grid" class="block-editor-type block-editor-display block-editor-type-columns">
+                                        grid
+                                    </div>
+                                    <div data-block-display="list-item" class="block-editor-type block-editor-display block-editor-type-columns">
+                                        list
+                                    </div>
+                                    <div class="separator"></div>
                                 </div>
                             </div>
                         </div>
@@ -279,7 +287,7 @@
             </div>`
         );
         
-        let new_block_content = new VElement(`<div data-block-type="1" class="new-block">{val}</div>`);
+        let new_block_content = new VElement(`<div data-block-direction="1" class="new-block">{val}</div>`);
 
         let new_post = new VElement(
             `<div data-type-post="{type}" data-id-post="{id}" data-art="post-{id}" class="post post-theme">
@@ -762,7 +770,6 @@
             elements: ['.post-confirm', '.post-hide']
         });
 
-
         V('.blog-post').event({
             events: ['click'],
             funcs: [
@@ -798,7 +805,7 @@
                     
                 }
             }
-
+            elem.removeClass('new-block-active');
         }
 
         function blurTextarea(elem){
@@ -824,14 +831,21 @@
                     V('.new-block-active').children('.add-block').remove();
                     simplify(e);
                     V('.new-block-active').removeClass('new-block-active');
-
                     elem.addClass('new-block-active');
-                    let types = V('.block-editor-types');
-                    let changetype = types.children();
-                    changetype.removeClass('block-editor-type-active');
-                    let istype = elem.attr('data-block-type');
-                    //changetype.get(istype).addClass('block-editor-type-active');
-                    types.children(`div[data-block-type="${istype}"]`).addClass('block-editor-type-active');
+
+                    ////////////////////////////////////////////////////////
+                        let types = V('.block-editor-types');
+                        let changetype = types.children('.block-direction');
+                        changetype.removeClass('block-editor-type-active');
+                        let direction = elem.attr('data-block-direction');
+                        types.children(`div[data-block-direction="${direction}"]`).addClass('block-editor-type-active');
+                    ////////////////////////////////////////////////////////
+                        let display = types.children('.block-editor-display');
+                        display.removeClass('block-editor-type-active');
+                        let istype = elem.css('display');
+                        types.children(`div[data-block-dispaly="${istype}"]`).addClass('block-editor-type-active');
+                    ////////////////////////////////////////////////////////
+
                     if(!e.ctrlKey){
                         if(parent.hasClass('new-block') ? parent.children('.new-block').count > 1 : true){
                             if(elem.children('.new-block').count == 0){
@@ -854,6 +868,7 @@
                             });
                         }
                         else{
+                            simplify();
                             let text = elem.text().trim();
                             elem.text('');
                             textarea.render(elem, 'append', {
@@ -884,7 +899,7 @@
                 }
             ],
             elements: ['.new-block', 'p']
-        });/**/
+        });
 
         V('.blog-post').event({
             events: ['click'],
@@ -895,7 +910,7 @@
                         let types = V('.block-editor-types');
                         let changetype = types.children();
                         changetype.removeClass('block-editor-type-active');
-                        let attr = parseInt(V(this).attr('data-block-type'));
+                        let attr = parseInt(V(this).attr('data-block-direction'));
                         V(this).addClass('block-editor-type-active');
 
                         if(attr == 1){
@@ -909,7 +924,7 @@
                     }
                 }
             ],
-            elements: ['.block-editor-type']
+            elements: ['.block-direction']
         });
     </script>
 {% endblock script %}
