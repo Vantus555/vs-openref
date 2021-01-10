@@ -9,10 +9,11 @@ urlpatterns = [
     path('', include('main.urls')),
     path('blog/', include('blog.urls')),
     path('user/', include('user.urls')),
+    path('bascet/', include('basket.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-for i in urlpatterns:
-    print(i)
+# for i in urlpatterns:
+#     print(i)

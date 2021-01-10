@@ -1,0 +1,58 @@
+{% extends 'base/main.html' %}
+
+
+{% block main %}
+    <h1>Ваша корзина</h1>
+
+    <div class='basket'>
+        <div class='basket-nav'>
+            <div class='basket-nav-item'>
+                Товар
+            </div>
+            <div class='basket-nav-item'>
+                Скидка
+            </div>
+            <div class='basket-nav-item'>
+                Цана
+            </div>
+            <div class='basket-nav-item'>
+                Сумма
+            </div>
+        </div>
+        {% for i in baskets %}
+            <div class='basket-buys'>
+                <div class='basket-buys-item'>
+                    <div style="background-image: url(/media/{{ i.post_buy.img }});" class='basket-img'>
+                        
+                    </div>
+                    <div class='basket-about'>
+                        <div class='basket-about-title'>
+                            {{ i.post_buy.title }}
+                        </div>
+                        <div class='basket-about-intro'>
+                            {{ i.post_buy.intro }}
+                        </div>
+                    </div>
+                </div>
+                <div class='basket-buys-item basket-buys-item-text'>
+                    20%
+                </div>
+                <div class='basket-buys-item basket-buys-item-text'>
+                    {{ i.post_buy.price }}
+                </div>
+                <div class='basket-buys-item basket-buys-item-text'>
+                    800
+                </div>
+            </div>
+        {% endfor %}
+        
+        <div class="user-hr"></div>
+        <div class="basket-finally-price">
+            <div class="basket-finally-price-text">Итого:</div>
+            <div class="basket-finally-price-sum">1000</div>
+        </div>
+        <div class="basket-finally-submit">
+            <button class="goformsubmit submitpost">Перейти к оплате</button>
+        </div>
+    </div>
+{% endblock main %}

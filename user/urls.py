@@ -16,4 +16,5 @@ urlpatterns = [
     path('ajaxAddRoot', ajaxAddRoot.as_view(), name="ajaxAddRoot_url"),
     path('ajaxUpdateRole', ajaxUpdateRole.as_view(), name="ajaxUpdateRole_url"),
     path('ajaxGetFreedoms', ajaxGetFreedoms.as_view(), name="ajaxGetFreedoms_url"),
+    path('ajaxDeleteImage', ajaxDeleteImage.as_view(), name="ajaxDeleteImage_url"),
 ]

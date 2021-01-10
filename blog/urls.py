@@ -9,4 +9,6 @@ urlpatterns = [
     path('ajaxGetPostText', ajaxGetPostText.as_view(), name="ajaxGetPostText_url"),
     path('ajaxGetDir', ajaxGetDir.as_view(), name="ajaxGetDir_url"),
     path('ajaxPublicationPost', ajaxPublicationPost.as_view(), name="ajaxPublicationPost_url"),
+    path('ajaxSavePost', ajaxSavePost.as_view(), name="ajaxSavePost_url"),
+    path('ajaxAddToBasket', ajaxAddToBasket.as_view(), name="ajaxAddToBasket_url"),
 ]

@@ -5,8 +5,43 @@
     <div class="images">
         <div class="gallery">
             {% for img in user|images %}
-                <div style="background-image: url(/media/images/{{user.nickname}}/{{ img }});" class="gallery-image"></div>
+                <div data-path="media/images/{{user.nickname}}/{{ img }}" style="background-image: url(/media/images/{{user.nickname}}/{{ img }});" class="gallery-image">
+                    <div class="delete-image">
+
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>
 {% endblock main %}
+
+{% block script %}
+    <script>
+    V('.delete-image').event({
+        events: ['click'],
+        funcs: [
+            function(e){
+                let parent = V(this).parent();
+
+                let data = new FormData();
+                let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                data.append('csrfmiddlewaretoken', csrf);
+
+                data.append('path', parent.attr('data-path'));
+
+                let response = fetch('{% url 'ajaxDeleteImage_url' %}', {
+                    method: 'POST',
+                    body: data
+                }).then(prom =>{
+                    return prom.text();
+                }).then(text => {
+                    if(text == 'Готово')
+                        parent.remove();
+                    else
+                        alert(text)
+                });
+            }
+        ]
+    });
+    </script>
+{% endblock script %}

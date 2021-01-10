@@ -1,12 +1,18 @@
 {% extends 'base/main.html' %}
 
 {% block main %}
+    {% load images %}
     {% load static %}
     <div class="user-info">
         <div class="user-image">
             <label class="loadimg lnewdata">
-                <img id="newimagepost" src="{{ user.img.url }}" class="viewloadimg"></img>
+                {% if user.img != '' %}
+                    <img id="newimagepost" src="{{ user.img.url }}" class="viewloadimg"></img>
+                {% else %}
+                    <img id="newimagepost" src="../media/images/people.png" class="viewloadimg"></img>
+                {% endif %}
                 <input class="inputloadimg" accept="image/*" type="file">
+                
             </label>
         </div>
         <div class="user-data">
@@ -99,7 +105,7 @@
                 </a>
                 <a href="{% url 'images_url' %}" class="user-own-block">
                     <div class="user-own-block-count">
-                        8
+                        {{ user|images|length }}
                     </div>
                     <div class="user-own-block-name">
                         картинки

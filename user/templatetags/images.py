@@ -8,5 +8,8 @@ register = template.Library()
 @register.filter(name='images')
 def get(user):
     path = 'media/images/' + user.nickname
-    files = os.listdir(path)
+    try:
+        files = os.listdir(path)
+    except BaseException:
+        files = []
     return files

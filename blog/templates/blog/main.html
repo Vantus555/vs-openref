@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="post-statistic">
                                     <div class="post-view">
-                                        3.6M
+                                        {{ post.getPricedir|floatformat }}
                                     </div>
                                 </div>
                             </div>
@@ -154,7 +154,7 @@
         <div class="newpost">
             <label class="loadimg lnewdata">
                 <div id="newimagepost" style="background-image: url({% static 'image/1.jpg' %});" class="viewloadimg"></div>
-                <input id="postimg" class="inputloadimg" accept="image/*" type="file">
+                <input id="postimg" onchange="viewimage(this);" class="inputloadimg" accept="image/*" type="file">
             </label>
             <div class="newpostabout">
                 <label class="lnewdata">
@@ -179,7 +179,7 @@
 {% endblock bodydown %}
 
 {% block script %}
-    <script>
+    <script>        
 
         let main_tab = new VElement(
             `<div data-post-art-tab="{post}" class="main-active-tab main-active-tab-theme">
@@ -193,13 +193,23 @@
             `<div data-post-art-tab-content='{post}' class='main-post'>
                 <div class='main-post-info'>
                     <div class='main-post-about'>
-                        <div style='background-image: {img};' class='main-post-about-img'>
+                        <div>
+                            <label class="loadimg lnewdata">
+                                <div style='background-image: {img};' class='main-post-about-img'></div>
+                                {changeImg}
+                            </label>
                         </div>
                         <div class='main-post-description'>
                             <div class='main-post-title'>
-                                <div class='main-post-title-text'>
-                                    {title}
-                                </div>
+                                {changing}
+                                <input style="display: none;" placeholder="Статус" class="inputvs" type="text">
+                                <div>{title}</div>
+                            </div>
+                            <div class='main-post-price'>
+                                {changing}
+                                Стоимость: 
+                                <input style="display: none;" placeholder="Статус" class="inputvs" type="text">
+                                <div style='margin-left: 5px;'>{price}</div>
                             </div>
                             <div class='main-post-statistic'>
                                 <div class='main-post-statistic-container'>
@@ -211,7 +221,9 @@
                                 </div>
                             </div>
                             <div class='main-post-intro'>
-                                {intro}
+                                {changing}
+                                <input style="display: none;" placeholder="Статус" class="inputvs" type="text">
+                                <div>{intro}</div>
                             </div>
                             <div class='main-post-like'>
                                 Лайки и репосты
@@ -243,39 +255,16 @@
                     <div class='post-tab-content-1 post-tab-content post-tab-content-actve'>
                         <div class="article-text-editor">
                             <div class="blocks-with-content">
-                                <div data-add="after" class="add-block"></div>
-                                <div data-block-direction="1" class="new-block"></div>
-                                <div data-add="before" class="add-block"></div>
+                                {addAfter}
+                                {text}
+                                {addBefore}
                             </div>
-                            <div class="block-editor">
-                                <div class="block-editor-types">
-                                    <div data-block-direction="1" class="block-editor-type block-direction block-editor-type-rows">
-                                        <div class=""></div>
-                                        <div class=""></div>
-                                        <div class=""></div>
-                                    </div>
-                                    <div data-block-direction="2" class="block-editor-type block-direction block-editor-type-columns">
-                                        <div class=""></div>
-                                        <div class=""></div>
-                                        <div class=""></div>
-                                    </div>
-                                    <div class="separator"></div>
-                                    <div data-block-display="grid" class="block-editor-type block-editor-display block-editor-type-columns">
-                                        grid
-                                    </div>
-                                    <div data-block-display="list-item" class="block-editor-type block-editor-display block-editor-type-columns">
-                                        list
-                                    </div>
-                                    <div class="separator"></div>
-                                </div>
-                            </div>
+                            {settings}
                         </div>
                         <div style="display: none;" class="article-html-editor">
                             
                         </div>
-                        <div style="display: none;" class="article-json-editor">
-                            
-                        </div>
+                        <textarea style="display: none; resize: none; font-size: 20px;" class="inputvs article-json-editor"></textarea>
                     </div>
                     <div class='post-tab-content-2 post-tab-content'>
 
@@ -301,12 +290,13 @@
                         </div>
                         <div class="post-statistic">
                             <div class="post-view">
-                                3.6M
+                                {price}
                             </div>
                         </div>
                     </div>
                     <div class="post-intro">
-                        {intro}
+                        <div>{intro}</div>
+                        <div class="post-buy"></div>
                     </div>
                     <div class="post-users-and-settings">
                         <div class="post-user-create">Vantus</div>
@@ -338,6 +328,343 @@
                 nodes.get(nodes.count-1).click();
             });
             active_list.click();
+        }
+        
+        function simplify(e = false){
+            let elem = V('.new-block-active');
+            if(elem.count){
+                let parent = elem.parent();
+                let children = elem.parent().children();
+                if(parent.hasClass('new-block') && children.count == 1){
+                    let text = elem.html();
+                    elem.remove();
+                    parent.html(text);
+                }
+                children = elem.children();
+                let child = elem.children('.new-block')
+                if(child.count == 1){
+                    let html = child.get(0).html();
+                    child.get(0).remove();
+                    elem.html(html);
+                }
+                  
+            }
+            elem.removeClass('new-block-active');
+        }
+
+        function blurTextarea(elem){
+            let text = V(elem).val();
+            V(elem).parent().html(toHtml(text));
+            V(elem).remove();
+            simplify();
+        }
+
+        let properties = {
+            'bc' : 'background-color',
+            'background-color' : 'bc',
+            'c' : 'color',
+            'color' : 'c',
+            'href' : 'href',
+            'ta' : 'text-align',
+            'text-align' : 'ta',
+            'fs' : 'font-size',
+            'font-size' : 'fs',
+        }
+
+        function getStyles(settings){
+            if(settings != ''){
+                let new_set = settings.split(';');
+                let arr = [];
+                for(let i of new_set)
+                    arr = arr.concat(i.split(':'));
+                arr = arr.filter(n => n);
+                let props = ''
+                for(let i = 0; i < arr.length; i++){
+                    props += [properties[arr[i]]] + ':' + arr[i+1] + ';';
+                    i++;
+                }
+                let res = [];
+                let num = arr.indexOf('href');
+                if(num >= 0){
+                    res.push('a href="' + arr[num+1] + '"');
+                }
+                else{
+                    res.push('span');
+                }
+                res.push(props);
+                if(res.length != 0)
+                    return res;
+            }
+            return '';
+        }
+        
+        function getArray(text, k = 0){
+            let arr = [];
+            let bigstr = '';
+            let settings = '';
+            for(let i = k; i < text.length; i++){
+                if(text[i] == '['){
+                    arr.push(i);
+                    let new_array = getArray(text, i+1)
+                    arr.push(new_array[0]);
+                    bigstr += new_array[2];
+                    i += new_array[1]+1;
+                }
+                else if(text[i] == ']'){
+                    arr.push(i);
+                    let styles = getStyles(settings);
+                    if(styles == '')
+                        return [arr, i-k, `<span>`+bigstr+`</span>`];
+                    else
+                        return [arr, i-k, `<${styles[0]} style='${styles[1]}'>`+bigstr+`</${styles[0]}>`];
+                }
+                else{
+                    if(k!=0 && text[i] == '|'){
+                        settings = bigstr;
+                        bigstr = '';
+                    }
+                    if(text[i] != '|')
+                        bigstr += text[i];
+                    if(text.length == i+1){
+                        let styles = getStyles(settings);
+                        if(styles == '')
+                            return [arr, `<span>`+bigstr+`</span>`];
+                        else
+                            return [arr, `<${styles[0]} style='${styles[1]}'>`+bigstr+`</${styles[0]}>`];
+                    }
+                }
+            }
+            return [arr, bigstr];
+        }
+
+        function toHtml(text){
+            let open = 0;
+            let close = 0;
+            for(let i = 0; i < text.length; i++){
+                if(text[i] == '[')
+                    open+=1;
+                if(text[i] == ']')
+                    close+=1;
+            }
+            if(open == close){
+                let skobki = getArray(text);
+                return skobki[skobki.length-1];
+            }
+            else{
+                return text;
+            }
+        }
+
+        function htmlToJson(elements){
+            let json = []
+            elements.forEach(element => {
+                let tag = element.elem(0).tagName;
+                let node = {
+                    'tagName': tag == undefined ? '#text' : tag
+                };
+                if(node['tagName'] == '#text')
+                    node['text'] = element.text();
+                else{
+                    node['atributes'] = {};
+                    let attrs = element.allAttr();
+                    for(let i of attrs){
+                        node['atributes'][i.name] = i.nodeValue;
+                    }
+                }
+                
+                let children = element.children('all');
+                if(children.count)
+                    node['children'] = [];
+                    children.forEach(el => {
+                        let child = htmlToJson(el);
+                        if(child){
+                            /*if(child.length == 1)
+                                node['children'].push(child[0]);
+                            else node['children'].push(child);*/
+                            node['children'].push(child);
+                        }
+                    });
+                json.push(node);
+            });
+            if(json.length == 1)
+                return json[0]
+            else return json;
+        }
+
+        function jsonToHtml(json){
+            let elemets = [];
+            if(Array.isArray(json)){
+                for(let el of json){
+                    let elem;
+                    if(el['tagName'] == '#text')
+                        elem = VantusJS.createElement(el['text']);
+                    else{
+                        elem = VantusJS.createElement(`<${el['tagName']}></${el['tagName']}>`);
+                        if('atributes' in el){
+                            for(let key in el['atributes'])
+                                elem.attr(key, el['atributes'][key]);
+                        }
+                    }
+                    let mass = [];
+                    if('children' in el){
+                        if(el['children'].length > 0){
+                            mass = jsonToHtml(el['children'])
+                        }
+                    }
+                    
+                    for(let key of mass){
+                        elem.put(key, 'append');
+                    }
+                    elemets.push(elem);
+                }
+            }
+            else{
+                let elem = VantusJS.createElement(`<${json['tagName']}></${json['tagName']}>`);
+                if('atributes' in json){
+                    for(let key in json['atributes'])
+                        elem.attr(key, json['atributes'][key]);
+                }
+                let mass = [];
+                if('children' in json){
+                    if(json['children'].length > 0){
+                        mass = jsonToHtml(json['children'])
+                    }
+                }
+                for(let key of mass){
+                    elem.put(key, 'append');
+                }
+                elemets.push(elem);
+            }
+
+            return elemets;
+        }
+
+        function jsonToText(json){
+            let elem = [];
+            if(Array.isArray(json)){
+                for(let el of json){
+                    if(el['tagName'] == '#text')
+                        elem.push(el['text']);
+                    else{
+                        elem.push('[');
+                        if('atributes' in el && 'style' in el['atributes']){
+                            let styles = getStyles(el['atributes']['style']);
+                            elem.push(styles[1] + '|');
+                        }
+                        if('children' in el){
+                            if(el['children'].length > 0){
+                                elem.push(jsonToText(el['children']));
+                            }
+                        }
+                        elem.push(']');
+                    }
+                }
+            }
+            else{
+                if(json['tagName'] == '#text')
+                    elem.push(json['text']);
+                else{
+                    elem.push('[');
+                    if('atributes' in json && 'style' in json['atributes']){
+                        let styles = getStyles(json['atributes']['style']);
+                        elem.push(styles[1] + '|');
+                    }
+                    if('children' in json){
+                        if(json['children'].length > 0){
+                            elem.push(jsonToText(json['children']));
+                        }
+                    }
+                    elem.push(']');
+                }
+            }
+            let str = '';
+            for(let i of elem)
+                str += i;
+
+            return str;
+        }
+
+        function newBlock(e, param){
+            let elem = V(param);
+            let bool = false;
+            
+            if(!V(e.target).hasClass('new-block') && e.target.tagName != 'TEXTAREA'){
+                elem = elem.parent('.new-block');
+                bool = true;
+            }
+
+            let parent = elem.parent();
+            e.defaultPrevented = true;
+            if(e.target == param || bool){
+                if(!elem.hasClass('new-block-active') || bool){
+                    V('.new-block-active').children('.add-block').remove();
+                    simplify(e);
+                    V('.new-block-active').removeClass('new-block-active');
+                    elem.addClass('new-block-active');
+
+                    ////////////////////////////////////////////////////////
+                        let types = V('.block-editor-types');
+                        let changetype = types.children('.block-direction');
+                        changetype.removeClass('block-editor-type-active');
+                        let direction = elem.attr('data-block-direction');
+                        types.children(`div[data-block-direction="${direction}"]`).addClass('block-editor-type-active');
+                    ////////////////////////////////////////////////////////
+                        let display = types.children('.block-display');
+                        display.removeClass('block-editor-type-active');
+                        let istype = elem.css('display');
+                        types.children(`div[data-block-display="${istype}"]`).addClass('block-editor-type-active');
+                    ////////////////////////////////////////////////////////
+
+                    if(!e.ctrlKey){
+                        if(parent.hasClass('new-block') ? parent.children('.new-block').count > 1 : true){
+                            if(elem.children('.new-block').count == 0){
+                                let val = '';
+                                if(elem.html() != ''){
+                                    val = elem.html();
+                                    elem.html('');
+                                }
+
+                                new_block_content.render(elem, 'append', {
+                                    val: val
+                                });
+                            }
+                                
+                            addBlock.render(elem, 'prepend', {
+                                where: 'after'
+                            });
+                            addBlock.render(elem, 'append', {
+                                where: 'before'
+                            });
+                        }
+                        else{
+                            simplify();
+                            let text = elem.text().trim();
+                            elem.text('');
+                            textarea.render(elem, 'append', {
+                                text: text
+                            });
+                            elem.children('textarea').elem(0).focus();
+                        }
+                    }
+                    if(e.ctrlKey){
+                        if(elem.children('.new-block').count == 0){
+                            let text = elem.html().trim();
+                            let res = htmlToJson(elem.children());
+                            //let html = jsonToHtml(res);
+                            let t = jsonToText(res);
+                            //console.log(t);
+                            //console.log(html[0]);
+                            //console.log(JSON.stringify(res, null, 1));
+                            elem.html('');
+                            
+                            textarea.render(elem, 'append', {
+                                text: t
+                            });
+                            elem.children('textarea').elem(0).focus();
+                        }
+                    }
+                }
+            }
         }
 
         V('.article-content-category').event({
@@ -404,20 +731,27 @@
                     }).then(prom =>{
                         return prom.json();
                     }).then(text => {
+                        let options = {
+                                    year: 'numeric', month: 'numeric', day: 'numeric',
+                                    hour: 'numeric', minute: 'numeric',
+                                    hour12: false
+                                };
                         for(i of text){
                             let public = i['fields']['public'];
                             let confirm = '';
                             if(public == true)
                                 confirm = 'hide';
                             else confirm = 'confirm';
+                            console.log(i);
                             new_post.render(active_list, 'append',{
                                 img: '/media/' + i['fields']['img'],
                                 id: i['pk'],
                                 title: i['fields']['title'],
                                 type: i['fields']['type'],
                                 intro: i['fields']['intro'],
-                                data: i['fields']['creation_data'],
-                                confirm: confirm
+                                data: new Date(i['fields']['creation_data']).toLocaleString('ru-RU', options),
+                                confirm: confirm,
+                                price: i['fields']['pricedir']
                             });
                         }
                         active_list.prevElement().children('.count').text(text.length);
@@ -503,6 +837,18 @@
             elements: ['.main-active-tab-close']
         });
         
+        function getJsonPost(){
+            let elems = V('.blocks-with-content > .new-block');
+            return htmlToJson(elems);
+        }
+
+        function jsonLoadPost(text){
+            let where = V('.blocks-with-content > div[data-add="before"]');
+            let mass = jsonToHtml(JSON.parse(text));
+            for(let i of mass)
+                where.put(i, 'before');
+        }
+
         V('.blog-post').event({
             events: ['click'],
             funcs: [
@@ -510,10 +856,70 @@
                     V('.post-type-active').removeClass('post-type-active');
                     V(this).addClass('post-type-active');
                     V(this).parent('.main-post').children('.post-tab-content-1').children().hide();
-                    V(this).parent('.main-post').children('.post-tab-content-1').children(V(this).attr('data-class')).show();
+                    V(this).parent('.main-post').children('.post-tab-content-1').children(V(this).attr('data-class')).show({
+                        display: 'grid'
+                    });
+                    if(V(this).attr('data-class') == '.article-json-editor'){
+                        V('.new-block-active').children('.add-block').remove();
+                        simplify();
+                        V('.new-block-active').removeClass('new-block-active');
+
+                        let jsonobj = getJsonPost();
+                        V('.article-json-editor').val(JSON.stringify(jsonobj, null, 1));
+                    }
+                    if(V(this).attr('data-class') == '.article-text-editor' && V('.article-json-editor').val() != ''){
+                        let elems = V('.blocks-with-content > .new-block').remove();
+                        let text = V('.article-json-editor').val();
+
+                        jsonLoadPost(text);
+                    }
+                    if(V(this).attr('data-class') == '.article-html-editor'){
+                        V('.new-block-active').children('.add-block').remove();
+                        simplify();
+                        V('.new-block-active').removeClass('new-block-active');
+
+                        let jsonobj = getJsonPost();
+                        let html = jsonToHtml(jsonobj);
+                        
+                        for(let i in html){
+                            if(i==0)
+                                V('.article-html-editor').text(html[i].outerHTML());
+                            else
+                                V('.article-html-editor').text(V('.article-html-editor').text() + html[i].outerHTML());
+                        }
+                    }
                 }
             ],
             elements: ['.post-type']
+        });
+
+        V('.blog-post').event({
+            events: ['click'],
+            funcs: [
+                function(e) {
+                    let elem = V(this);
+                    let id = elem.attr('data-id');
+                    let post_info = elem.parent('.main-post').children('.main-post-about');
+                    let title = post_info.children('.main-post-title :last-child').text();
+                    let price = post_info.children('.main-post-price :last-child').text();
+                    let intro = post_info.children('.main-post-intro :last-child').text();
+
+                    var data = new FormData();
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+                    data.append('id', id);
+                    data.append('text', JSON.stringify(getJsonPost()));
+                    data.append('title', title);
+                    data.append('intro', intro);
+                    data.append('price', price);
+
+                    let response = fetch('{% url 'ajaxSavePost_url' %}', {
+                        method: 'POST',
+                        body: data
+                    });
+                }
+            ],
+            elements: ['.savePost']
         });
 
         V('.blog-post').event({
@@ -551,27 +957,23 @@
             ]
         });
 
-        V(".inputloadimg").event({
-            events: ['change'],
-            funcs: [
-                function(){
-                    var input = this;
-                    if (input.files && input.files[0]) {
-                        if (input.files[0].type.match('image.*')) {
-                            var reader = new FileReader();
-                            reader.onload = function (e) {
-                                V('#newimagepost').css({'background-image': 'url(' + e.target.result + ')'});
-                            }
-                            reader.readAsDataURL(input.files[0]);
-                        } else {
-                            console.error('Ошибка, файл не является изображение!');
-                        }
-                    } else {
-                        console.error('Файл не выбран');
+        function viewimage(elem){
+            let input = elem;
+            if (input.files && input.files[0]) {
+                if (input.files[0].type.match('image.*')) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        // V('#newimagepost').css({'background-image': 'url(' + e.target.result + ')'});
+                        V(input).prevElement().css({'background-image': 'url(' + e.target.result + ')'});
                     }
-                },
-            ]
-        });
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    console.error('Ошибка, файл не является изображение!');
+                }
+            } else {
+                console.error('Файл не выбран');
+            }
+        }
 
         V('.submitpost').event({
             events: ['click'],
@@ -588,6 +990,7 @@
                     data.append('title', V('#posttitle').val());
                     data.append('intro', V('#postintro').val());
                     data.append('type', V('#posttype').val());
+                    console.log(V('#postimg').array()[0].files);
                     data.append('img', V('#postimg').array()[0].files[0]);
 
                     let response = fetch('{% url 'ajaxAddPost_url' %}', {
@@ -597,7 +1000,8 @@
                         return prom.text();
                     }).then(data => {
                         alert(data);
-                    });/**/
+                        updatePosts();
+                    });
                 }
             ]
         });
@@ -607,7 +1011,7 @@
             funcs: [
                 function(e) {
                     V(this).parent('.article-content-category-list').click();
-                    if(!V(e.target).hasClass('post-delete') && !V(e.target).hasClass('post-confirm') && !V(e.target).hasClass('post-hide')){
+                    if(!V(e.target).hasClass('post-buy') && !V(e.target).hasClass('post-delete') && !V(e.target).hasClass('post-confirm') && !V(e.target).hasClass('post-hide')){
                         let main_elem = V(this).parent('.post');
                         let post = main_elem.attr('data-art');
                         let post_type = main_elem.attr('data-type-post');
@@ -616,6 +1020,7 @@
                         let img = main_elem.children('.post-source-img').css('background-image');
                         let user = main_elem.children('.post-user-create').text();
                         let intro = main_elem.children('.post-intro').text();
+                        let price = main_elem.children('.post-view').text();
                         var data = new FormData();
                         let csrf = V('input[name="csrfmiddlewaretoken"]').val();
                         data.append('csrfmiddlewaretoken', csrf);
@@ -627,23 +1032,76 @@
                                 method: 'POST',
                                 body: data
                             }).then(prom =>{
-                                return prom.text();
+                                return prom.json();
                             }).then(text => {
                                 let main_actve = V(`div[data-post-art-tab="${post}"]`);
-                                if(main_actve.count == 0){
+                                if(main_actve.count == 0 && 'text' in text){
                                     main_tab.render(V('.main-active-tabs'), 'prepend',{
                                         post: post,
                                         title: title
                                     });
-                                    main_tab_content.render(V('.blog-post'), 'append',{
-                                        post: post,
-                                        title: title,
-                                        img: img,
-                                        user: user,
-                                        intro: intro,
-                                        text: text
+                                    let html = jsonToHtml(JSON.parse(text['text']));
+                                    let res = '';
+                                    html.forEach(element => {
+                                        res += element.outerHTML();
                                     });
+                                    if(!('allow' in text))
+                                        main_tab_content.render(V('.blog-post'), 'append',{
+                                            post: post,
+                                            title: title,
+                                            img: img,
+                                            user: user,
+                                            intro: intro,
+                                            id: id,
+                                            text: res,
+                                            settings: '',
+                                            changing: ``,
+                                            changeImg: ``,
+                                            addBefore: ``,
+                                            addAfter: ``,
+                                            price: price
+                                        });
+                                    else
+                                        main_tab_content.render(V('.blog-post'), 'append',{
+                                            post: post,
+                                            title: title,
+                                            img: img,
+                                            user: user,
+                                            intro: intro,
+                                            id: id,
+                                            text: res,
+                                            settings: `
+                                                <div class="block-editor">
+                                                    <div class="block-editor-types">
+                                                        <div data-id='${id}' class="savePost block-editor-type block-editor-type-rows">
+                                                            <span class="">
+                                                                >
+                                                            </span>
+                                                        </div>
+                                                        <div class="separator"></div>
+                                                        <div data-block-direction="1" class="block-editor-type block-direction block-editor-type-rows">
+                                                            <div class=""></div>
+                                                            <div class=""></div>
+                                                            <div class=""></div>
+                                                        </div>
+                                                        <div data-block-direction="2" class="block-editor-type block-direction block-editor-type-columns">
+                                                            <div class=""></div>
+                                                            <div class=""></div>
+                                                            <div class=""></div>
+                                                        </div>
+                                                    </div>
+                                                </div>`,
+                                            changing: `<div class="change-post-info">/</div>`,
+                                            changeImg: `<input id="postimg" onchange="viewimage(this);" class="inputloadimg" accept="image/*" type="file">`,
+                                            addBefore: `<div data-add="before" class="add-block"></div>`,
+                                            addAfter: `<div data-add="after" class="add-block"></div>`,
+                                            price: price
+                                        });
                                 }
+                                if(!('text' in text))
+                                    alert('Данная статья вам недоступна! Необходимо приобрести её!');
+                                else if(!(main_actve.count == 0))
+                                    alert('Статья уже открыта!');
                             });
                         }
                         else{
@@ -664,18 +1122,11 @@
                             }).then(prom =>{
                                 return prom.json();
                             }).then(text => {
-                                /*for(i of text){
-                                    console.log(i);
-                                    new_post.render(list, 'append',{
-                                        img: '/media/' + i['fields']['img'],
-                                        id: i['pk'],
-                                        title: i['fields']['title'],
-                                        type: i['fields']['type'],
-                                        intro: i['fields']['intro'],
-                                        data: i['fields']['creation_data']
-                                    });
-                                }*/
-                                
+                                let options = {
+                                    year: 'numeric', month: 'numeric', day: 'numeric',
+                                    hour: 'numeric', minute: 'numeric',
+                                    hour12: false
+                                };                          
                                 for(i of text){
                                     let public = i['fields']['public'];
                                     let confirm = '';
@@ -688,8 +1139,9 @@
                                         title: i['fields']['title'],
                                         type: i['fields']['type'],
                                         intro: i['fields']['intro'],
-                                        data: i['fields']['creation_data'],
-                                        confirm: confirm
+                                        data: new Date(i['fields']['creation_data']).toLocaleString('ru-RU', options),
+                                        confirm: confirm,
+                                        price: i['fields']['pricedir']
                                     });
                                 }
                                 list.prevElement().children('.count').text(text.length);
@@ -710,7 +1162,7 @@
                     if(success){
                         let elem = V(this).parent('.post');
                         let id = elem.attr('data-id-post');
-                        var data = new FormData();
+                        let data = new FormData();
 
                         let csrf = V('input[name="csrfmiddlewaretoken"]').val();
                         data.append('csrfmiddlewaretoken', csrf);
@@ -770,6 +1222,32 @@
             elements: ['.post-confirm', '.post-hide']
         });
 
+        V('.article-content-category-list').event({
+            events: ['click'],
+            funcs: [
+                function(e){
+                    let elem = V(this).parent('.post');
+                    let id = elem.attr('data-id-post');
+                    let data = new FormData();
+
+                    let csrf = V('input[name="csrfmiddlewaretoken"]').val();
+                    data.append('csrfmiddlewaretoken', csrf);
+
+                    data.append('id', id);
+
+                    let response = fetch('{% url 'ajaxAddToBasket_url' %}', {
+                        method: 'POST',
+                        body: data
+                    }).then(prom =>{
+                        return prom.text();
+                    }).then(text => {
+                        alert(text);
+                    });
+                }
+            ],
+            elements: ['.post-buy']
+        });
+
         V('.blog-post').event({
             events: ['click'],
             funcs: [
@@ -783,122 +1261,14 @@
             elements: ['.add-block']
         });
 
-        function simplify(e = false){
-            let elem = V('.new-block-active');
-            if(elem.count){
-                let parent = elem.parent();
-                let children = elem.parent().children();
-                if(parent.hasClass('new-block') && children.count == 1){
-                    let text = elem.html();
-                    elem.remove();
-                    parent.html(text);
-                }
-                if(e != false){
-                    if(!e.ctrlKey){
-                        let child = elem.children('.new-block')
-                        if(child.count == 1){
-                            let html = child.get(0).html();
-                            child.get(0).remove();
-                            elem.html(html);
-                        }
-                    }
-                    
-                }
-            }
-            elem.removeClass('new-block-active');
-        }
-
-        function blurTextarea(elem){
-            let text = V(elem).val();
-            V(elem).parent().html(text);
-            V(elem).remove();
-            simplify();
-        }
-
-        function newBlock(e, param){
-            let elem = V(param);
-            let bool = false
-            
-            if(!V(e.target).hasClass('new-block') && e.target.tagName != 'TEXTAREA'){
-                elem = elem.parent('.new-block');
-                bool = true;
-            }
-
-            let parent = elem.parent();
-            e.defaultPrevented = true;
-            if(e.target == param || bool){
-                if(!elem.hasClass('new-block-active') || bool){
-                    V('.new-block-active').children('.add-block').remove();
-                    simplify(e);
-                    V('.new-block-active').removeClass('new-block-active');
-                    elem.addClass('new-block-active');
-
-                    ////////////////////////////////////////////////////////
-                        let types = V('.block-editor-types');
-                        let changetype = types.children('.block-direction');
-                        changetype.removeClass('block-editor-type-active');
-                        let direction = elem.attr('data-block-direction');
-                        types.children(`div[data-block-direction="${direction}"]`).addClass('block-editor-type-active');
-                    ////////////////////////////////////////////////////////
-                        let display = types.children('.block-editor-display');
-                        display.removeClass('block-editor-type-active');
-                        let istype = elem.css('display');
-                        types.children(`div[data-block-dispaly="${istype}"]`).addClass('block-editor-type-active');
-                    ////////////////////////////////////////////////////////
-
-                    if(!e.ctrlKey){
-                        if(parent.hasClass('new-block') ? parent.children('.new-block').count > 1 : true){
-                            if(elem.children('.new-block').count == 0){
-                                let val = '';
-                                if(elem.html() != ''){
-                                    val = elem.html();
-                                    elem.html('');
-                                }
-
-                                new_block_content.render(elem, 'append', {
-                                    val: val
-                                });
-                            }
-                                
-                            addBlock.render(elem, 'prepend', {
-                                where: 'after'
-                            });
-                            addBlock.render(elem, 'append', {
-                                where: 'before'
-                            });
-                        }
-                        else{
-                            simplify();
-                            let text = elem.text().trim();
-                            elem.text('');
-                            textarea.render(elem, 'append', {
-                                text: text
-                            });
-                            elem.children('textarea').elem(0).focus();
-                        }
-                    }
-                    if(e.ctrlKey){
-                        if(elem.children('.new-block').count == 0){
-                            let text = elem.html().trim();
-                            elem.html('');
-                            textarea.render(elem, 'append', {
-                                text: text
-                            });
-                            elem.children('textarea').elem(0).focus();
-                        }
-                    }
-                }
-            }
-        }
-
         V('.blog-post').event({
-            events: ['click'],//'mouseover', 'mouseout'
+            events: ['click'],
             funcs: [
                 function(e){
                     newBlock(e, this);
                 }
             ],
-            elements: ['.new-block', 'p']
+            elements: ['.new-block', 'span']
         });
 
         V('.blog-post').event({
@@ -908,7 +1278,7 @@
                     let active_block = V('.new-block-active');
                     if(active_block.count != 0){
                         let types = V('.block-editor-types');
-                        let changetype = types.children();
+                        let changetype = types.children('.block-direction');
                         changetype.removeClass('block-editor-type-active');
                         let attr = parseInt(V(this).attr('data-block-direction'));
                         V(this).addClass('block-editor-type-active');
@@ -925,6 +1295,28 @@
                 }
             ],
             elements: ['.block-direction']
+        });
+
+        V('.blog-post').event({
+            events: ['click'],
+            funcs: [
+                function(){
+                    let input = V(this).nextElement();
+                    let text = input.nextElement();
+                    if(input.css('display') == 'none'){
+                        input.val(text.text().trim());
+                        input.show();
+                        text.hide();
+                    }
+                    else{
+                        text.text(input.val().trim());
+                        input.hide();
+                        text.show();
+                    }
+                    
+                }
+            ],
+            elements: ['.change-post-info']
         });
     </script>
 {% endblock script %}

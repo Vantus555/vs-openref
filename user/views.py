@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.views.generic import View
 from html import unescape
 from html import escape
+import os
 from .forms import *
 from .models import *
 
@@ -30,9 +31,18 @@ class images(View):
             'user' : user.objects.get(nickname = request.session['login'])
         })
 
+class ajaxDeleteImage(View):
+    def post(self, request):
+        try:
+            os.remove(request.POST['path'])
+            return HttpResponse('Готово')
+        except BaseException:
+            return HttpResponse('Ошибка')
+
 class ajaxRegistration(View):
     def post(self, request):
         post = request.POST
+        print(post)
         form = RegistrationUserForm(request.POST)
         
         if form.is_valid():
